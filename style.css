@@ -1,0 +1,689 @@
+/* Variables de Couleurs */
+:root {
+    --dark-bg: #0A0A0A;
+    --dark-secondary-bg: #121212;
+    --light-text: #E0E0E0;
+    --neon-blue: #00BFFF;
+    --neon-blue-transparent-light: rgba(0, 191, 255, 0.1);
+    --neon-blue-transparent-medium: rgba(0, 191, 255, 0.3);
+    --glass-bg: rgba(25, 25, 30, 0.5);
+    --waveform-bg: #282c34;
+    --waveform-played: var(--neon-blue);
+    --waveform-unplayed: #555b66;
+
+    --font-primary: 'Rajdhani', sans-serif;
+    --font-secondary: 'Open Sans', sans-serif;
+}
+
+/* Styles Généraux */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-secondary);
+    background-color: var(--dark-bg);
+    color: var(--light-text);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+h1, h2, h3, h4 {
+    font-family: var(--font-primary);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+h3 { /* Titres de sous-section comme "Mon Parcours", "Ma Musique" (utilisé dans .parcours-section h3 et .subsection-title) */
+    font-size: 2rem; /* Unifié la taille pour H3 de sous-section */
+    color: var(--neon-blue);
+    text-shadow: 0 0 0.5px var(--neon-blue), 0 0 5px var(--neon-blue), 0 0 10px rgba(0, 191, 255, 0.7);
+}
+
+h4 { /* Titres des items dans les cartes (BL3U FONCE, Carateh, Pochette d'album) */
+    font-size: 1.6rem;
+    color: var(--light-text);
+    margin-bottom: 0.5rem;
+}
+
+a {
+    color: var(--neon-blue);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: white;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Header & Navigation */
+header {
+    background-color: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(5px);
+    padding: 1rem 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--neon-blue-transparent-medium);
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: var(--font-primary);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--light-text);
+}
+.logo:hover {
+    color: var(--light-text);
+}
+
+.logo .neon-highlight {
+    color: var(--neon-blue);
+    text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 25px;
+}
+
+nav ul li a {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: 1.1rem;
+    padding-bottom: 5px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s ease, border-bottom-color 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+    color: var(--neon-blue);
+    border-bottom-color: var(--neon-blue);
+}
+
+/* Effet Néon pour Texte (utilisé pour les titres H1 et H2 de section) */
+.neon-text {
+    color: var(--neon-blue);
+    text-shadow: 0 0 0.5px var(--neon-blue), 0 0 5px var(--neon-blue), 0 0 10px rgba(0, 191, 255, 0.7);
+}
+
+/* Section Héros */
+#hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding-top: 80px;
+    background-image: url('Image/skeleton-site.png'); /* Assure-toi que ce chemin est correct */
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.hero-background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+#hero h1 { /* Titre "Portefolio" dans le hero */
+    font-size: 3.8rem;
+    margin-bottom: 0.5rem;
+}
+
+#hero p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: #ccc;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: var(--neon-blue);
+    color: var(--dark-bg);
+    padding: 12px 30px;
+    border-radius: 5px;
+    font-family: var(--font-primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 2px solid var(--neon-blue);
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: transparent;
+    color: var(--neon-blue);
+    box-shadow: 0 0 15px var(--neon-blue);
+}
+
+/* Sections de Contenu Générales */
+.content-section {
+    padding: 80px 0;
+    background-color: var(--dark-secondary-bg);
+}
+.content-section:nth-child(even) { /* #about et #competences auront --dark-bg */
+   background-color: var(--dark-bg);
+}
+
+.content-section h2 { /* Titres H2 "À Propos de Moi", "Mes Compétences", "Contactez-moi" */
+    text-align: center;
+    font-size: 2.8rem;
+    margin-bottom: 3.5rem;
+}
+
+/* Effet Verre Dépoli (Glassmorphism) */
+.glass-effect {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 10px;
+    padding: 25px;
+    border: 1px solid var(--neon-blue-transparent-medium);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Section À Propos */
+.about-content {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 3rem;
+}
+.artist-photo {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--neon-blue);
+    flex-shrink: 0;
+    box-shadow: 0 0 15px var(--neon-blue-transparent-medium);
+}
+.about-content p {
+    flex: 1;
+    font-size: 1.1rem;
+}
+
+/* SECTION PARCOURS */
+.parcours-section {
+    margin-top: 4rem;
+}
+.parcours-section h3 { /* "Mon Parcours" */
+    text-align: left;
+    margin-bottom: 2rem;
+}
+.parcours-content {
+    display: flex;
+    align-items: flex-start; /* Aligne en haut pour que le texte et le conteneur d'images commencent au même niveau */
+    gap: 40px;
+}
+.parcours-text {
+    flex: 1; /* Le texte prend plus de place */
+    order: 1;
+}
+.parcours-text p {
+    font-size: 1rem;
+    line-height: 1.7;
+}
+.parcours-text strong {
+    color: var(--neon-blue);
+    font-weight: 700;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+.images-container { /* Conteneur pour les images de formation */
+    flex-basis: 320px; /* Largeur de base pour le conteneur d'images */
+    display: flex;
+    flex-direction: column; /* Images empilées verticalement */
+    gap: 15px; /* Espace entre les images si plusieurs */
+    order: 2;
+    align-self: stretch; /* S'étire pour correspondre à la hauteur du texte si possible */
+}
+.images-container .formation-image {
+    width: 100%; /* Prend toute la largeur du .images-container */
+    height: auto;
+    max-height: 200px; /* Limite la hauteur de chaque image pour ne pas être trop grandes */
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid var(--neon-blue-transparent-medium);
+}
+
+
+/* SECTION COMPÉTENCES */
+#competences .container h2 {
+    margin-bottom: 3.5rem;
+}
+
+.competence-subsection {
+    margin-bottom: 4.5rem;
+}
+.competence-subsection:last-child {
+    margin-bottom: 0;
+}
+
+.subsection-title { /* Titres H3 "Ma Musique", "Mes Productions", "Graphisme" */
+    font-size: 2.2rem;
+    margin-bottom: 2.5rem;
+    text-align: left;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--neon-blue-transparent-medium);
+}
+
+/* Styles pour "Ma Musique" (single release) */
+.music-showcase .single-release-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+    padding: 25px; /* Le glass-effect a déjà un padding, donc ceci est additionnel */
+}
+
+.music-showcase .single-artwork {
+    flex-basis: 320px;
+    max-width: 320px;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid var(--neon-blue-transparent-light);
+    box-shadow: 0 0 10px var(--neon-blue-transparent-light);
+}
+
+.music-showcase .single-details {
+    flex: 1;
+    text-align: left;
+}
+
+.music-showcase .single-details h4 { /* Titre "BL3U FONCE" */
+    font-size: 2.2rem; /* Même taille que .subsection-title pour la cohérence */
+    color: var(--neon-blue);
+    margin-bottom: 0.7rem;
+    text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+}
+
+.music-showcase .single-details .release-type {
+    font-size: 1rem;
+    color: #bbb;
+    font-family: var(--font-secondary);
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.music-showcase .single-details .release-description {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    color: var(--light-text);
+}
+
+.music-showcase .soundcloud-button {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--neon-blue);
+    color: var(--dark-bg);
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-family: var(--font-primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 2px solid var(--neon-blue);
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+}
+
+.music-showcase .soundcloud-button:hover {
+    background-color: transparent;
+    color: var(--neon-blue);
+    box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue-transparent-medium);
+}
+
+/* Styles pour les grilles de Productions et Graphisme */
+.production-grid,
+.graphisme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    /* Le padding général vient du .glass-effect parent */
+}
+
+.item-card {
+    background-color: rgba(35, 35, 40, 0.7);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--neon-blue-transparent-light);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column; /* Important pour la structure interne */
+}
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 191, 255, 0.2);
+}
+
+.item-card img { /* Image en haut de la carte */
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.item-card-content { /* Conteneur pour le texte et le lecteur/bouton */
+    padding: 1.5rem;
+    flex-grow: 1; /* Permet à cette section de grandir */
+    display: flex;
+    flex-direction: column; /* Empile le h4, p, et le lecteur/bouton */
+    text-align: left;
+}
+
+.item-card-content h4 { /* Titres dans les cartes (Carateh, Lila, Pochette d'album) */
+    /* hérite de h4 global */
+    margin-bottom: 0.5rem;
+}
+
+.item-card-content p {
+    font-size: 0.95rem;
+    color: #b0b0b0;
+    margin-bottom: 1.2rem;
+    /* Pas de flex-grow ici, le lecteur/bouton utilisera margin-top: auto */
+}
+
+/* Styles pour le lecteur audio personnalisé */
+.audio-player-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto; /* Pousse le lecteur en bas de .item-card-content */
+    padding-top: 12px;
+    border-top: 1px solid var(--neon-blue-transparent-light);
+}
+
+.play-pause-button {
+    background: transparent;
+    border: 2px solid var(--neon-blue);
+    color: var(--neon-blue);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.play-pause-button:hover {
+    background-color: var(--neon-blue);
+    color: var(--dark-bg);
+    box-shadow: 0 0 8px var(--neon-blue);
+}
+.play-pause-button i {
+    display: block;
+    line-height: 1;
+}
+
+.waveform-container {
+    flex-grow: 1;
+    height: 50px; /* Hauteur fixe pour le canvas et la barre */
+    min-width: 150px; /* Empêche d'être trop écrasé */
+    background-color: var(--waveform-bg);
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.waveform-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.progress-bar-container {
+    display: none ;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    border-radius: 4px;
+}
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: transparent;
+    border-radius: 4px;
+    transition: width 0.05s linear; /* Transition plus rapide pour la barre */
+}
+
+.time-display {
+    font-size: 0.85rem;
+    color: #b0b0b0;
+    min-width: 75px; /* Assez large pour "00:00 / 00:00" */
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+}
+
+/* Bouton Voir en Grand pour le graphisme */
+.item-card .view-button {
+    display: inline-block; /* Ou block si tu veux qu'il prenne toute la largeur dispo */
+    background-color: transparent;
+    color: var(--neon-blue);
+    padding: 10px 22px;
+    border-radius: 5px;
+    font-family: var(--font-primary);
+    font-weight: 600;
+    border: 2px solid var(--neon-blue);
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    margin-top: auto; /* Pousse le bouton en bas si le contenu au-dessus est flexible */
+    align-self: flex-start; /* Aligne à gauche par défaut */
+    text-align: center;
+}
+.item-card .view-button:hover {
+    background-color: var(--neon-blue);
+    color: var(--dark-bg);
+    box-shadow: 0 0 10px var(--neon-blue);
+}
+
+/* Section Contact */
+.contact-details {
+    max-width: 700px;
+    margin: 0 auto 2rem auto;
+    text-align: center;
+}
+.contact-details p {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+.contact-details strong {
+    color: var(--neon-blue);
+}
+.contact-details a {
+    font-weight: normal;
+    color: var(--light-text);
+    text-decoration: underline;
+    text-decoration-color: var(--neon-blue-transparent-medium);
+}
+.contact-details a:hover {
+    color: var(--neon-blue);
+    text-decoration-color: var(--neon-blue);
+}
+
+.social-links {
+    text-align: center;
+    margin-top: 1rem;
+}
+.social-links a {
+    margin: 0 10px;
+    font-size: 1.2rem;
+    display: inline-block;
+    padding: 5px;
+}
+.social-links a:hover {
+    color: white;
+    text-shadow: 0 0 5px var(--neon-blue);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2rem 0;
+    background-color: var(--dark-bg);
+    border-top: 1px solid var(--neon-blue-transparent-medium);
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    header .container {
+        flex-direction: column;
+        align-items: center;
+    }
+    nav ul {
+        margin-top: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    nav ul li {
+        margin: 0 10px 10px 10px;
+    }
+    #hero h1 {
+        font-size: 2.8rem;
+    }
+    #hero p {
+        font-size: 1.3rem;
+    }
+    .content-section h2 {
+        font-size: 2.2rem;
+    }
+
+    .about-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .artist-photo {
+        margin-bottom: 1.5rem;
+        width: 180px;
+        height: 180px;
+    }
+
+    .parcours-content {
+        flex-direction: column;
+        align-items: center; /* Centre les éléments sur mobile */
+        text-align: center; /* Centre le texte sur mobile */
+    }
+    .parcours-text {
+        order: 2; /* Texte en dessous */
+        margin-top: 1.5rem;
+        flex-basis: auto; /* Réinitialise flex-basis */
+    }
+    .images-container { /* Le conteneur d'images passe en premier */
+        order: 1;
+        flex-basis: auto; /* Réinitialise flex-basis */
+        width: 90%; /* Prend plus de largeur */
+        max-width: 300px; /* Limite la taille max */
+    }
+    .parcours-section h3 {
+        text-align: center; /* Centre le titre "Mon Parcours" sur mobile */
+    }
+
+    .subsection-title {
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    .music-showcase .single-release-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+    .music-showcase .single-artwork {
+        flex-basis: auto;
+        width: 80%;
+        max-width: 280px;
+        height: auto;
+    }
+    .music-showcase .single-details h4 {
+        font-size: 2rem;
+    }
+
+    .production-grid,
+    .graphisme-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    .item-card img {
+        height: 200px;
+    }
+    .item-card-content {
+        padding: 1.2rem;
+        text-align: center; /* Centre le texte dans les cartes sur mobile */
+    }
+    .item-card-content h4 {
+        font-size: 1.5rem;
+    }
+    .item-card .view-button {
+        align-self: center; /* Centre le bouton "Voir en Grand" */
+    }
+
+    .audio-player-wrapper {
+        gap: 10px;
+        /* Pourrait avoir besoin de flex-wrap: wrap sur mobile si trop serré */
+    }
+    .waveform-container {
+        height: 45px;
+    }
+    .play-pause-button {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    .time-display {
+       font-size: 0.8rem;
+       min-width: 65px;
+    }
+}

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Portefolio Musical</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+    <!-- Font Awesome pour les icônes Play/Pause -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="#hero" class="logo">Darcel Nathan <span class="neon-highlight">Nada</span></a>
+            <nav>
+                <ul>
+                    <li><a href="#hero">Accueil</a></li>
+                    <li><a href="#about">À Propos</a></li>
+                    <li><a href="#competences">Compétences</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero">
+            <div class="hero-content">
+                <h1 class="neon-text">Portefolio</h1>
+                <p>Création sonore et sound design.</p>
+                <a href="#competences" class="cta-button">Découvrir mes compétences</a>
+            </div>
+            <div class="hero-background-overlay"></div>
+        </section>
+
+        <section id="about" class="content-section">
+            <div class="container">
+                <h2 class="neon-text">À Propos de Moi</h2>
+                <div class="about-content glass-effect">
+                    <img src="Image/Photo identité.jpeg" alt="Photo de Darcel Nathan Nada" class="artist-photo">
+                    <p>Passionné par la création sonore, je pratique depuis plusieurs années l'enregistrement, le montage et le mixage audio.
+                        J’ai appris à maîtriser les outils et techniques du sound design, de la prise de son studio/live, et du mixage.
+                        Après avoir obtenu ma formation RNCP Technicien du son je souhaite approfondir mes compétences techniques et créatives en intégrant la Licence Professionnelle Techniques du Son et de l'Image – Parcours CIAN à l’Université Rennes 2.
+                        Sur ce site, vous découvrirez mes réalisations personnelles et scolaires dans le domaine de l'audiovisuel, et du son.</p>
+                </div>
+
+                <div class="parcours-section glass-effect">
+                    <h3 class="neon-text">Mon Parcours</h3>
+                    <div class="parcours-content">
+                        <div class="parcours-text">
+                            <h4>Technicien du son Rennes (CFPM) 2023-2025</h4>
+                            <p>J'ai commencé à composer mes propres instrumentales il y a 4 ans, d'abord par passion, puis avec rigueur. En parallèle, j'ai appris à m’enregistrer, mixer mes morceaux et aider d'autres artistes à faire de même.</p>
+                            <p><strong>Experiences</strong><br>
+                                Enregistrement de ma propre voix + artistes locaux<br>
+                                Participation a un ep, habillage sonore et mixage complet<br>
+                                Sonorisation de scènes ouvertes LIEU(placement des micros, gestion table de mixage)<br>
+                                -Bar en trans 2023 (bar LA PLACE)<br>
+                                Balances,prise de sons, instalations, fludifications des changement dartistes<br>
+                                -Projet 32 MetCar<br>
+                                Album en commun avec 3 amis et musiciens<br>
+                                Creation de la prod<br>
+                                Prise de sons, mix et master de chaque éléments.<br>
+                            </p>
+                        </div>
+                        <div class="images-container"> <!-- Conteneur pour les images de formation -->
+                            <img src="Image/CFPM Rennes.jpeg" alt="Logo CFPM École de musique et techniques du son" class="formation-image">
+                            <!-- Tu peux ajouter une autre image ici si tu en as une deuxième distincte -->
+                            <!-- <img src="chemin/vers/autre_image_formation.jpg" alt="Autre image de formation" class="formation-image"> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="competences" class="content-section">
+            <div class="container">
+                <h2 class="neon-text">Mes Compétences</h2>
+
+                <div class="competence-subsection">
+                    <h3 class="subsection-title neon-text">Ma Musique</h3>
+                    <div class="music-showcase">
+                        <div class="single-release-card glass-effect">
+                            <img src="Image\2cd41f00f206636090a1061ff353accb.jpg" alt="Pochette BL3U FONCE" class="single-artwork">
+                            <div class="single-details">
+                                <h4>BL3U FONCE</h4>
+                                <p class="release-type">Morceau</p>
+                                <p class="release-description">
+                                    Auteur - Interprète - Mixage - Prod<br>
+                                    Morceau introspectif boom bap avec samples jazz.
+                                </p>
+                                <a href="https://soundcloud.com/nada-management/bl3u-fonce?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing" target="_blank" class="soundcloud-button">
+                                    Écouter sur SoundCloud
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="competence-subsection">
+                    <h3 class="subsection-title neon-text">Mes Productions (Sound Design / Beats)</h3>
+                    <div class="production-grid glass-effect">
+                        <!-- Production 1: Carateh -->
+                        <div class="item-card audio-item">
+                            <div class="item-card-content">
+                                <h4>Caracteh</h4>
+                                <p>Type: Beat Trap</p>
+                                <div class="audio-player-wrapper">
+                                    <button class="play-pause-button" data-src="audio/caracteh.mp3" aria-label="Lire/Mettre en pause Carateh">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <div class="waveform-container">
+                                        <canvas class="waveform-canvas"></canvas> <!-- Pas besoin de width/height ici, JS s'en charge -->
+                                        <div class="progress-bar-container">
+                                            <div class="progress-bar"></div>
+                                        </div>
+                                    </div>
+                                    <div class="time-display">
+                                        <span class="current-time">0:00</span> / <span class="duration-time">--:--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Production 2: Lila -->
+                        <div class="item-card audio-item">
+                            <div class="item-card-content">
+                                <h4>Lila</h4>
+                                <p>Type: Beat Afro</p>
+                                <div class="audio-player-wrapper">
+                                    <button class="play-pause-button" data-src="audio/lila.wav" aria-label="Lire/Mettre en pause Lila">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <div class="waveform-container">
+                                        <canvas class="waveform-canvas"></canvas>
+                                        <div class="progress-bar-container">
+                                            <div class="progress-bar"></div>
+                                        </div>
+                                    </div>
+                                    <div class="time-display">
+                                        <span class="current-time">0:00</span> / <span class="duration-time">--:--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="competence-subsection">
+                    <h3 class="subsection-title neon-text">Graphisme (Pochettes / Visuels)</h3>
+                    <div class="graphisme-grid glass-effect">
+                        <div class="item-card">
+                            <img src="Image/Nathan Pochette d'album.png" alt="Pochette d'album réalisée par Nathan Darcel">
+                            <div class="item-card-content">
+                                <h4>Pochette d'album</h4>
+                                <p>Création personnelle</p>
+                                <a href="Image/Nathan Pochette d'album.png" target="_blank" class="view-button">Voir en Grand</a>
+                            </div>
+                        </div>
+                        <div class="item-card">
+                            <img src="Image/Affiche Fest Noz.png" alt="Affiche Fest Noz">
+                            <div class="item-card-content">
+                                <h4>Affiche Fest Noz</h4>
+                                <p>Création Scolaire</p>
+                                <a href="Image/Affiche Fest Noz.png" target="_blank" class="view-button">Voir en Grand</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="content-section">
+            <div class="container">
+                <h2 class="neon-text">Contactez-moi</h2>
+                <div class="contact-details glass-effect">
+                    <p>Vous pouvez me contacter pour plus d’informations via :</p>
+                    <p>
+                        <strong>Email :</strong> <a href="mailto:nathan.darcel1@gmail.com">nathan.darcel1@gmail.com</a>
+                    </p>
+                    <p>
+                        <strong>Téléphone :</strong> <a href="tel:+33613483332">+33 6 13 48 33 32</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="currentYear"></span> Nada. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
