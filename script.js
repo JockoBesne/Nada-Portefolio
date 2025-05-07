@@ -300,4 +300,45 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    document.addEventListener('DOMContentLoaded', function() {
+        // ... (Ton code JS existant pour la nav, le footer, le scroll, les lecteurs audio, etc.) ...
+    
+        // --- GESTION DU MENU BURGER POUR MOBILE ---
+        const navToggle = document.querySelector('.nav-toggle');
+        const mainNav = document.querySelector('.main-nav');
+    
+        if (navToggle && mainNav) {
+            navToggle.addEventListener('click', function() {
+                mainNav.classList.toggle('nav-open'); // Affiche/cache le menu
+    
+                // Optionnel: Changer l'icône burger en croix (X) quand le menu est ouvert
+                const icon = navToggle.querySelector('i');
+                if (mainNav.classList.contains('nav-open')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times'); // Icône croix de Font Awesome
+                    navToggle.setAttribute('aria-label', 'Fermer le menu de navigation');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                    navToggle.setAttribute('aria-label', 'Ouvrir le menu de navigation');
+                }
+            });
+    
+            // Optionnel: Fermer le menu mobile quand un lien est cliqué
+            const navLinksMobile = mainNav.querySelectorAll('a');
+            navLinksMobile.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mainNav.classList.contains('nav-open')) {
+                        mainNav.classList.remove('nav-open');
+                        // Réinitialiser l'icône burger
+                        const icon = navToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                        navToggle.setAttribute('aria-label', 'Ouvrir le menu de navigation');
+                    }
+                });
+            });
+        }
+    });
+
 }); // Fin de DOMContentLoaded

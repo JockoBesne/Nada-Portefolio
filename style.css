@@ -31,6 +31,7 @@ body {
     background-color: var(--dark-bg);
     color: var(--light-text);
     line-height: 1.6;
+    overflow-x: hidden; /* Empêche le scroll horizontal si un élément dépasse un peu */
 }
 
 .container {
@@ -45,13 +46,13 @@ h1, h2, h3, h4 {
     font-weight: 700;
 }
 
-h3 { /* Titres de sous-section comme "Mon Parcours", "Ma Musique" (utilisé dans .parcours-section h3 et .subsection-title) */
-    font-size: 2rem; /* Unifié la taille pour H3 de sous-section */
+h3 {
+    font-size: 2rem;
     color: var(--neon-blue);
     text-shadow: 0 0 0.5px var(--neon-blue), 0 0 5px var(--neon-blue), 0 0 10px rgba(0, 191, 255, 0.7);
 }
 
-h4 { /* Titres des items dans les cartes (BL3U FONCE, Carateh, Pochette d'album) */
+h4 {
     font-size: 1.6rem;
     color: var(--light-text);
     margin-bottom: 0.5rem;
@@ -81,7 +82,7 @@ header {
     position: fixed;
     width: 100%;
     top: 0;
-    z-index: 1000;
+    z-index: 1000; /* Doit être élevé pour rester au-dessus */
     border-bottom: 1px solid var(--neon-blue-transparent-medium);
 }
 
@@ -89,6 +90,7 @@ header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative; /* Pour le positionnement du menu mobile */
 }
 
 .logo {
@@ -96,6 +98,7 @@ header .container {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--light-text);
+    z-index: 1100; /* Pour être au-dessus du menu mobile si le menu est plein écran */
 }
 .logo:hover {
     color: var(--light-text);
@@ -106,34 +109,57 @@ header .container {
     text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
 }
 
-nav ul {
+/* Styles pour la navigation principale (desktop) */
+.main-nav {
+    /* Styles pour la nav sur desktop */
+}
+.main-nav ul {
     list-style: none;
     display: flex;
+    margin: 0;
+    padding: 0;
 }
-
-nav ul li {
+.main-nav ul li {
     margin-left: 25px;
 }
-
-nav ul li a {
+.main-nav ul li a {
     font-family: var(--font-primary);
     font-weight: 400;
     font-size: 1.1rem;
-    padding-bottom: 5px;
+    padding: 0.5rem 0.25rem; /* Ajout d'un peu de padding pour une meilleure zone de clic */
+    padding-bottom: 5px; /* Conserve ton padding-bottom */
     border-bottom: 2px solid transparent;
     transition: color 0.3s ease, border-bottom-color 0.3s ease;
+    display: block;
 }
-
-nav ul li a:hover,
-nav ul li a.active {
+.main-nav ul li a:hover,
+.main-nav ul li a.active {
     color: var(--neon-blue);
     border-bottom-color: var(--neon-blue);
 }
 
-/* Effet Néon pour Texte (utilisé pour les titres H1 et H2 de section) */
-.neon-text {
+/* Bouton pour ouvrir/fermer la navigation sur mobile */
+.nav-toggle {
+    display: none; /* Caché par défaut sur les grands écrans */
+    background: transparent;
+    border: 1px solid var(--neon-blue);
     color: var(--neon-blue);
-    text-shadow: 0 0 0.5px var(--neon-blue), 0 0 5px var(--neon-blue), 0 0 10px rgba(0, 191, 255, 0.7);
+    font-size: 1.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    cursor: pointer;
+    /* Pas besoin de position absolute si on utilise flexbox dans header .container sur mobile */
+    z-index: 1100; /* Au-dessus de la nav déroulante */
+}
+.nav-toggle:hover {
+    background-color: var(--neon-blue-transparent-medium);
+}
+
+
+/* Effet Néon pour Texte (utilisé pour les titres H1 et H2 de section) */
+.neon-text { /* Cette classe est déjà sur tes H1 et H2 */
+    /* color: var(--neon-blue); */ /* Déjà défini dans h3 si .neon-text est aussi sur h3 */
+    /* text-shadow: 0 0 0.5px var(--neon-blue), 0 0 5px var(--neon-blue), 0 0 10px rgba(0, 191, 255, 0.7); */
 }
 
 /* Section Héros */
@@ -144,12 +170,12 @@ nav ul li a.active {
     justify-content: center;
     text-align: center;
     position: relative;
-    padding-top: 80px;
-    background-image: url('Image/skeleton-site.png'); /* Assure-toi que ce chemin est correct */
+    padding-top: 80px; /* Hauteur du header pour décaler le contenu */
+    background-image: url('Image/skeleton-site.png'); /* CHEMIN À VÉRIFIER SOIGNEUSEMENT (CASSE INCLUSE) */
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    background-attachment: fixed;
+    background-attachment: fixed; /* Peut causer des soucis sur mobile, voir media query */
 }
 
 .hero-background-overlay {
@@ -165,9 +191,10 @@ nav ul li a.active {
 .hero-content {
     position: relative;
     z-index: 2;
+    padding: 20px; /* Ajout de padding pour éviter que le texte ne colle aux bords sur très petits écrans */
 }
 
-#hero h1 { /* Titre "Portefolio" dans le hero */
+#hero h1 {
     font-size: 3.8rem;
     margin-bottom: 0.5rem;
 }
@@ -203,11 +230,11 @@ nav ul li a.active {
     padding: 80px 0;
     background-color: var(--dark-secondary-bg);
 }
-.content-section:nth-child(even) { /* #about et #competences auront --dark-bg */
+.content-section:nth-child(even) {
    background-color: var(--dark-bg);
 }
 
-.content-section h2 { /* Titres H2 "À Propos de Moi", "Mes Compétences", "Contactez-moi" */
+.content-section h2 {
     text-align: center;
     font-size: 2.8rem;
     margin-bottom: 3.5rem;
@@ -249,17 +276,17 @@ nav ul li a.active {
 .parcours-section {
     margin-top: 4rem;
 }
-.parcours-section h3 { /* "Mon Parcours" */
+.parcours-section h3 {
     text-align: left;
     margin-bottom: 2rem;
 }
 .parcours-content {
     display: flex;
-    align-items: flex-start; /* Aligne en haut pour que le texte et le conteneur d'images commencent au même niveau */
+    align-items: flex-start;
     gap: 40px;
 }
 .parcours-text {
-    flex: 1; /* Le texte prend plus de place */
+    flex: 1;
     order: 1;
 }
 .parcours-text p {
@@ -273,23 +300,22 @@ nav ul li a.active {
     margin-bottom: 0.5rem;
 }
 
-.images-container { /* Conteneur pour les images de formation */
-    flex-basis: 320px; /* Largeur de base pour le conteneur d'images */
+.images-container {
+    flex-basis: 320px;
     display: flex;
-    flex-direction: column; /* Images empilées verticalement */
-    gap: 15px; /* Espace entre les images si plusieurs */
+    flex-direction: column;
+    gap: 15px;
     order: 2;
-    align-self: stretch; /* S'étire pour correspondre à la hauteur du texte si possible */
+    align-self: stretch;
 }
 .images-container .formation-image {
-    width: 100%; /* Prend toute la largeur du .images-container */
+    width: 100%;
     height: auto;
-    max-height: 200px; /* Limite la hauteur de chaque image pour ne pas être trop grandes */
+    max-height: 200px;
     object-fit: cover;
     border-radius: 8px;
     border: 2px solid var(--neon-blue-transparent-medium);
 }
-
 
 /* SECTION COMPÉTENCES */
 #competences .container h2 {
@@ -303,7 +329,7 @@ nav ul li a.active {
     margin-bottom: 0;
 }
 
-.subsection-title { /* Titres H3 "Ma Musique", "Mes Productions", "Graphisme" */
+.subsection-title {
     font-size: 2.2rem;
     margin-bottom: 2.5rem;
     text-align: left;
@@ -317,9 +343,8 @@ nav ul li a.active {
     flex-direction: row;
     align-items: center;
     gap: 40px;
-    padding: 25px; /* Le glass-effect a déjà un padding, donc ceci est additionnel */
+    padding: 25px;
 }
-
 .music-showcase .single-artwork {
     flex-basis: 320px;
     max-width: 320px;
@@ -329,19 +354,16 @@ nav ul li a.active {
     border: 2px solid var(--neon-blue-transparent-light);
     box-shadow: 0 0 10px var(--neon-blue-transparent-light);
 }
-
 .music-showcase .single-details {
     flex: 1;
     text-align: left;
 }
-
-.music-showcase .single-details h4 { /* Titre "BL3U FONCE" */
-    font-size: 2.2rem; /* Même taille que .subsection-title pour la cohérence */
+.music-showcase .single-details h4 {
+    font-size: 2.2rem;
     color: var(--neon-blue);
     margin-bottom: 0.7rem;
     text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
 }
-
 .music-showcase .single-details .release-type {
     font-size: 1rem;
     color: #bbb;
@@ -349,14 +371,12 @@ nav ul li a.active {
     font-style: italic;
     margin-bottom: 1rem;
 }
-
 .music-showcase .single-details .release-description {
     font-size: 1.1rem;
     margin-bottom: 1.5rem;
     line-height: 1.7;
     color: var(--light-text);
 }
-
 .music-showcase .soundcloud-button {
     display: inline-flex;
     align-items: center;
@@ -372,7 +392,6 @@ nav ul li a.active {
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
     text-decoration: none;
 }
-
 .music-showcase .soundcloud-button:hover {
     background-color: transparent;
     color: var(--neon-blue);
@@ -385,7 +404,6 @@ nav ul li a.active {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 30px;
-    /* Le padding général vient du .glass-effect parent */
 }
 
 .item-card {
@@ -395,37 +413,31 @@ nav ul li a.active {
     border: 1px solid var(--neon-blue-transparent-light);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
-    flex-direction: column; /* Important pour la structure interne */
+    flex-direction: column;
 }
 .item-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0, 191, 255, 0.2);
 }
-
-.item-card img { /* Image en haut de la carte */
+.item-card img {
     width: 100%;
     height: 220px;
     object-fit: cover;
 }
-
-.item-card-content { /* Conteneur pour le texte et le lecteur/bouton */
+.item-card-content {
     padding: 1.5rem;
-    flex-grow: 1; /* Permet à cette section de grandir */
+    flex-grow: 1;
     display: flex;
-    flex-direction: column; /* Empile le h4, p, et le lecteur/bouton */
+    flex-direction: column;
     text-align: left;
 }
-
-.item-card-content h4 { /* Titres dans les cartes (Carateh, Lila, Pochette d'album) */
-    /* hérite de h4 global */
+.item-card-content h4 {
     margin-bottom: 0.5rem;
 }
-
 .item-card-content p {
     font-size: 0.95rem;
     color: #b0b0b0;
     margin-bottom: 1.2rem;
-    /* Pas de flex-grow ici, le lecteur/bouton utilisera margin-top: auto */
 }
 
 /* Styles pour le lecteur audio personnalisé */
@@ -433,11 +445,10 @@ nav ul li a.active {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-top: auto; /* Pousse le lecteur en bas de .item-card-content */
+    margin-top: auto;
     padding-top: 12px;
     border-top: 1px solid var(--neon-blue-transparent-light);
 }
-
 .play-pause-button {
     background: transparent;
     border: 2px solid var(--neon-blue);
@@ -462,45 +473,29 @@ nav ul li a.active {
     display: block;
     line-height: 1;
 }
-
 .waveform-container {
     flex-grow: 1;
-    height: 50px; /* Hauteur fixe pour le canvas et la barre */
-    min-width: 150px; /* Empêche d'être trop écrasé */
+    height: 50px;
+    min-width: 150px;
     background-color: var(--waveform-bg);
     border-radius: 4px;
     position: relative;
     cursor: pointer;
     overflow: hidden;
 }
-
 .waveform-canvas {
     display: block;
     width: 100%;
     height: 100%;
 }
 .progress-bar-container {
-    display: none ;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    border-radius: 4px;
+    display: none;
 }
-.progress-bar {
-    height: 100%;
-    width: 0%;
-    background-color: transparent;
-    border-radius: 4px;
-    transition: width 0.05s linear; /* Transition plus rapide pour la barre */
-}
-
+/* .progress-bar { ... }  Inutile si conteneur est display:none */
 .time-display {
     font-size: 0.85rem;
     color: #b0b0b0;
-    min-width: 75px; /* Assez large pour "00:00 / 00:00" */
+    min-width: 75px;
     text-align: right;
     font-variant-numeric: tabular-nums;
     flex-shrink: 0;
@@ -508,7 +503,7 @@ nav ul li a.active {
 
 /* Bouton Voir en Grand pour le graphisme */
 .item-card .view-button {
-    display: inline-block; /* Ou block si tu veux qu'il prenne toute la largeur dispo */
+    display: inline-block;
     background-color: transparent;
     color: var(--neon-blue);
     padding: 10px 22px;
@@ -518,8 +513,8 @@ nav ul li a.active {
     border: 2px solid var(--neon-blue);
     transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
     text-decoration: none;
-    margin-top: auto; /* Pousse le bouton en bas si le contenu au-dessus est flexible */
-    align-self: flex-start; /* Aligne à gauche par défaut */
+    margin-top: auto;
+    align-self: flex-start;
     text-align: center;
 }
 .item-card .view-button:hover {
@@ -576,19 +571,81 @@ footer {
     font-size: 0.9rem;
 }
 
-/* Responsive */
+/* --- STYLES RESPONSIVES --- */
 @media (max-width: 768px) {
     header .container {
-        flex-direction: column;
+        flex-direction: row; /* Logo à gauche, burger à droite */
+        justify-content: space-between;
+        /* position: relative; est déjà sur header .container (pas besoin de le répéter ici) */
+    }
+
+    .nav-toggle {
+        display: flex; /* Utilise flex pour mieux centrer l'icône à l'intérieur */
         align-items: center;
-    }
-    nav ul {
-        margin-top: 1rem;
-        flex-wrap: wrap;
         justify-content: center;
+        /* Le positionnement absolu n'est plus nécessaire si le header .container utilise space-between */
+        /* Si tu veux le coller à droite :
+        margin-left: auto;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        position: static; (ou ne pas le mettre en absolute plus haut)
+        */
     }
-    nav ul li {
-        margin: 0 10px 10px 10px;
+
+    .main-nav {
+        display: none; /* Caché par défaut sur mobile */
+        position: absolute;
+        top: 100%; /* Se positionne juste en dessous du header */
+        left: 0;
+        right: 0;
+        background-color: rgba(10, 10, 10, 0.97); /* Fond un peu plus opaque */
+        backdrop-filter: blur(10px); /* Flou plus prononcé */
+        border-top: 1px solid var(--neon-blue); /* Bordure néon plus visible */
+        padding: 0; /* Le padding sera sur les li > a */
+        z-index: 1050; /* En dessous du nav-toggle mais au-dessus du reste */
+        box-shadow: 0 5px 15px rgba(0, 191, 255, 0.1); /* Ombre néon subtile */
+    }
+
+    .main-nav.nav-open { /* Classe ajoutée par JS pour afficher le menu */
+        display: block;
+    }
+
+    .main-nav ul {
+        flex-direction: column;
+        align-items: stretch; /* Les liens prennent toute la largeur */
+        width: 100%;
+    }
+
+    .main-nav ul li {
+        margin: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    .main-nav ul li a {
+        padding: 1rem 1.5rem; /* Padding uniforme */
+        width: 100%;
+        border-bottom: 1px solid var(--neon-blue-transparent-light);
+        font-size: 1.2rem; /* Liens un peu plus grands */
+    }
+    .main-nav ul li:last-child a {
+        border-bottom: none;
+    }
+
+    .main-nav ul li a:hover,
+    .main-nav ul li a.active {
+        background-color: var(--neon-blue-transparent-medium); /* Hover plus visible */
+        color: var(--neon-blue);
+        border-bottom-color: var(--neon-blue-transparent-light); /* Ou la même couleur que le hover */
+    }
+
+    /* Section Hero sur mobile */
+    #hero {
+        background-attachment: scroll; /* Important pour éviter les problèmes de fixed sur mobile */
+        /* Si l'image ne s'affiche toujours pas, ré-déclarer explicitement : */
+        background-image: url('Image/skeleton-site.png');
+        min-height: 80vh; /* Peut-être réduire un peu la hauteur sur mobile */
     }
     #hero h1 {
         font-size: 2.8rem;
@@ -596,6 +653,8 @@ footer {
     #hero p {
         font-size: 1.3rem;
     }
+
+    /* Autres ajustements responsives */
     .content-section h2 {
         font-size: 2.2rem;
     }
@@ -613,27 +672,27 @@ footer {
 
     .parcours-content {
         flex-direction: column;
-        align-items: center; /* Centre les éléments sur mobile */
-        text-align: center; /* Centre le texte sur mobile */
+        align-items: center;
+        text-align: center;
     }
     .parcours-text {
-        order: 2; /* Texte en dessous */
+        order: 2;
         margin-top: 1.5rem;
-        flex-basis: auto; /* Réinitialise flex-basis */
+        flex-basis: auto;
     }
-    .images-container { /* Le conteneur d'images passe en premier */
+    .images-container {
         order: 1;
-        flex-basis: auto; /* Réinitialise flex-basis */
-        width: 90%; /* Prend plus de largeur */
-        max-width: 300px; /* Limite la taille max */
+        flex-basis: auto;
+        width: 90%;
+        max-width: 300px;
     }
     .parcours-section h3 {
-        text-align: center; /* Centre le titre "Mon Parcours" sur mobile */
+        text-align: center;
     }
 
     .subsection-title {
         font-size: 2rem;
-        text-align: center;
+        text-align: center; /* Centre les titres de sous-section sur mobile */
     }
 
     .music-showcase .single-release-card {
@@ -661,7 +720,7 @@ footer {
     }
     .item-card-content {
         padding: 1.2rem;
-        text-align: center; /* Centre le texte dans les cartes sur mobile */
+        text-align: center; /* Centre le contenu des cartes sur mobile */
     }
     .item-card-content h4 {
         font-size: 1.5rem;
@@ -672,7 +731,7 @@ footer {
 
     .audio-player-wrapper {
         gap: 10px;
-        /* Pourrait avoir besoin de flex-wrap: wrap sur mobile si trop serré */
+        /* flex-wrap: wrap; Optionnel si l'espace est très limité */
     }
     .waveform-container {
         height: 45px;
