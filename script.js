@@ -342,5 +342,22 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!navToggle) console.error('Élément .nav-toggle non trouvé. Vérifiez votre HTML.');
         if (!mainNav) console.error('Élément .main-nav non trouvé. Vérifiez votre HTML.');
     }
+    // (À ajouter dans ton script.js, dans DOMContentLoaded)
+
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabContents = document.querySelectorAll('.tab-content');
+
+tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Désactiver tous les boutons et contenus
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        // Activer le bouton cliqué et le contenu correspondant
+        button.classList.add('active');
+        const targetTab = button.dataset.tab;
+        document.getElementById(targetTab).classList.add('active');
+    });
+});
 
 }); // Fin de DOMContentLoaded principal

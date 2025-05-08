@@ -39,36 +39,101 @@
         <section id="about" class="content-section">
             <div class="container">
                 <h2 class="neon-text">À Propos de Moi</h2>
-                <div class="about-content glass-effect">
-                    <img src="Image\13615D1D-8C24-4F74-96F3-63B5047D33DF.jpeg" alt="Photo de Darcel Nathan Nada" class="artist-photo">
-                    <p>Passionné par la création sonore, je pratique depuis plusieurs années l'enregistrement, le montage et le mixage audio.
-                        J’ai appris à maîtriser les outils et techniques du sound design, de la prise de son studio/live, et du mixage.
-                        Après avoir obtenu ma formation RNCP Technicien du son je souhaite approfondir mes compétences techniques et créatives en intégrant la Licence Professionnelle Techniques du Son et de l'Image – Parcours CIAN à l’Université Rennes 2.
-                        Sur ce site, vous découvrirez mes réalisations personnelles et scolaires dans le domaine de l'audiovisuel, et du son.</p>
-                </div>
-
-                <div class="parcours-section glass-effect">
-                    <h3 class="neon-text">Mon Parcours</h3>
-                    <div class="parcours-content">
-                        <div class="parcours-text">
-                            <h4>Technicien du son Rennes (CFPM) 2023-2025</h4>
-                            <p>J'ai commencé à composer mes propres instrumentales il y a 4 ans, d'abord par passion, puis avec rigueur. En parallèle, j'ai appris à m’enregistrer, mixer mes morceaux et aider d'autres artistes à faire de même.</p>
-                            <p><strong>Experiences</strong><br>
-                                Enregistrement de ma propre voix + artistes locaux<br>
-                                Participation a un ep, habillage sonore et mixage complet<br>
-                                Sonorisation de scènes ouvertes LIEU(placement des micros, gestion table de mixage)<br>
-                                -Bar en trans 2023 (bar LA PLACE)<br>
-                                Balances,prise de sons, instalations, fludifications des changement dartistes<br>
-                                -Projet 32 MetCar<br>
-                                Album en commun avec 3 amis et musiciens<br>
-                                Creation de la prod<br>
-                                Prise de sons, mix et master de chaque éléments.<br>
-                            </p>
+        
+                <div class="tabs-container glass-effect">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="qui-suis-je">Qui suis-je ?</button>
+                        <button class="tab-button" data-tab="parcours">Mon Parcours</button>
+                        <button class="tab-button" data-tab="outils">Mes Outils</button>
+                    </div>
+        
+                    <!-- Onglet: Qui suis-je ? -->
+                    <div class="tab-content active" id="qui-suis-je">
+                        <div class="about-intro-layout">
+                            <div class="about-intro-image-container">
+                                <img src="Image/13615D1D-8C24-4F74-96F3-63B5047D33DF.jpeg" alt="Darcel Nathan Nada" class="about-intro-photo">
+                            </div>
+                            <div class="about-intro-text">
+                                <h3 class="tab-content-title">Darcel Nathan <span class="neon-highlight">Nada</span></h3>
+                                <p>Passionné par la création sonore, je pratique depuis plusieurs années l'enregistrement, le montage et le mixage audio. J’ai appris à maîtriser les outils et techniques du sound design, de la prise de son studio/live, et du mixage.</p>
+                                <p>Après avoir obtenu ma formation RNCP Technicien du son, je souhaite approfondir mes compétences techniques et créatives en intégrant la Licence Professionnelle Techniques du Son et de l'Image – Parcours CIAN à l’Université Rennes 2.</p>
+                                <!-- Peut-être un trait de personnalité ou une citation ici ? -->
+                            </div>
                         </div>
-                        <div class="images-container"> <!-- Conteneur pour les images de formation -->
-                            <img src="Image\logo-cfpm-V1-blanc-rvb.jpg" alt="Logo CFPM École de musique et techniques du son" class="formation-image">
-                            <!-- Tu peux ajouter une autre image ici si tu en as une deuxième distincte -->
-                            <img src="Image\F2435830-9EF7-4B0C-B1A5-1ED58BB1A138.jpeg" alt="Logo CFPM École de musique et techniques du son1" class="formation-image">
+                    </div>
+        
+                    <!-- Onglet: Mon Parcours -->
+                    <div class="tab-content" id="parcours">
+                        <h3 class="tab-content-title">Formation & Expériences Clés</h3>
+        
+                        <div class="parcours-entry">
+                            <div class="parcours-entry-image-container">
+                                <img src="Image/logo-cfpm-V1-blanc-rvb.jpg" alt="Logo CFPM" class="parcours-entry-logo">
+                            </div>
+                            <div class="parcours-entry-details">
+                                <h4>Technicien du son, CFPM Rennes (2023-2025)</h4>
+                                <p>Formation intensive couvrant la prise de son studio et live, le mixage, le mastering, le sound design et l'acoustique. J'y ai développé une compréhension approfondie des workflows professionnels et affûté mes oreilles critiques sur de nombreux projets pratiques.</p>
+                                <!-- Tu peux ajouter un ou deux points clés :
+                                <ul>
+                                    <li>Projet marquant : Réalisation de la bande-son d'un court-métrage étudiant.</li>
+                                    <li>Compétence clé acquise : Maîtrise avancée de Pro Tools pour l'édition et le mixage.</li>
+                                </ul>
+                                -->
+                            </div>
+                        </div>
+        
+                        <div class="parcours-entry experience">
+                            <div class="parcours-entry-image-container">
+                                <img src="Image/F2435830-9EF7-4B0C-B1A5-1ED58BB1A138.jpeg" alt="Sonorisation événement" class="parcours-entry-photo"> <!-- Remplace par une photo de toi en action si possible -->
+                            </div>
+                            <div class="parcours-entry-details">
+                                <h4>Expérience : Sonorisation Bar en Trans 2023 (Bar LA PLACE)</h4>
+                                <p>Responsable de l'installation du matériel, des balances sonores pour plusieurs artistes, et de la gestion de la console de mixage pendant les performances. Une expérience formatrice en gestion du direct et adaptation rapide aux besoins des musiciens.</p>
+                            </div>
+                        </div>
+        
+                         <div class="parcours-entry experience">
+                            <!-- Pas d'image ici si tu veux varier, ou une autre photo si tu as -->
+                            <div class="parcours-entry-details full-width"> <!-- Classe pour prendre toute la largeur si pas d'image -->
+                                <h4>Projet Collaboratif : Album "32 MetCar"</h4>
+                                <p>Participation à la création d'un album collectif. Mes contributions incluaient la composition de certaines productions, l'enregistrement des voix et instruments, ainsi que le mixage et le mastering de plusieurs titres. Ce projet a renforcé mes compétences en collaboration artistique et en gestion de projet audio de A à Z.</p>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- Onglet: Mes Outils -->
+                    <div class="tab-content" id="outils">
+                        <h3 class="tab-content-title">Logiciels & Environnement de Travail</h3>
+                        <p class="outils-intro">Voici un aperçu des outils que j'utilise pour sculpter le son et créer des visuels :</p>
+                        <div class="outils-grid">
+                            <div class="outil-card">
+                                <div class="outil-screenshot-container">
+                                    <img src="chemin/vers/screenshot_fl_studio_interface.jpg" alt="Interface FL Studio" class="outil-screenshot">
+                                </div>
+                                <div class="outil-description">
+                                    <h4>FL Studio</h4>
+                                    <p>Mon DAW de prédilection pour la composition, l'arrangement et la production de beats. Sa flexibilité et son piano roll intuitif sont parfaits pour mon workflow créatif.</p>
+                                </div>
+                            </div>
+                            <div class="outil-card">
+                                 <div class="outil-logo-container"> <!-- Pour les logos simples -->
+                                    <img src="chemin/vers/logo_protools.svg" alt="Logo Pro Tools" class="outil-logo">
+                                </div>
+                                <div class="outil-description">
+                                    <h4>Pro Tools</h4>
+                                    <p>Utilisé pour l'enregistrement, l'édition précise et le mixage audio professionnel, notamment lors de ma formation et pour des projets demandant un standard industriel.</p>
+                                </div>
+                            </div>
+                            <div class="outil-card">
+                                <div class="outil-logo-container">
+                                    <img src="chemin/vers/logo_photoshop.svg" alt="Logo Photoshop" class="outil-logo">
+                                </div>
+                                <div class="outil-description">
+                                    <h4>Adobe Photoshop</h4>
+                                    <p>Pour la création et la retouche de pochettes d'albums, d'affiches et autres visuels accompagnant mes projets musicaux.</p>
+                                </div>
+                            </div>
+                            <!-- Ajouter Ableton Live, autres plugins VST favoris, matériel si pertinent... -->
                         </div>
                     </div>
                 </div>
@@ -190,7 +255,7 @@
 
     <footer>
         <div class="container">
-            <p>© <span id="currentYear"></span> Nada. Tous droits réservés.</p>
+            <p>© <span id="currentYear"></span> Nada. Tous droits réservés. ©<span id="currentYear"></span>JockoBesne</p>
         </div>
     </footer>
 

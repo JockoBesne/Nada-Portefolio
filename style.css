@@ -46,13 +46,15 @@ h1, h2, h3, h4 {
     font-weight: 700;
 }
 
-h3 {
+/* h3 est déjà stylé pour .neon-text, mais si utilisé ailleurs sans .neon-text: */
+h3:not(.neon-text):not(.tab-content-title) {
     font-size: 2rem;
     color: var(--neon-blue);
     text-shadow: 0 0 0.5px var(--neon-blue), 0 0 5px var(--neon-blue), 0 0 10px rgba(0, 191, 255, 0.7);
 }
 
-h4 {
+
+h4 { /* Base h4 style */
     font-size: 1.6rem;
     color: var(--light-text);
     margin-bottom: 0.5rem;
@@ -82,7 +84,7 @@ header {
     position: fixed;
     width: 100%;
     top: 0;
-    z-index: 1000; /* Doit être élevé pour rester au-dessus */
+    z-index: 1000;
     border-bottom: 1px solid var(--neon-blue-transparent-medium);
 }
 
@@ -90,7 +92,7 @@ header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative; /* Pour le positionnement du menu mobile */
+    position: relative;
 }
 
 .logo {
@@ -98,7 +100,7 @@ header .container {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--light-text);
-    z-index: 1100; /* Pour être au-dessus du menu mobile si le menu est plein écran */
+    z-index: 1100;
 }
 .logo:hover {
     color: var(--light-text);
@@ -109,10 +111,6 @@ header .container {
     text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
 }
 
-/* Styles pour la navigation principale (desktop) */
-.main-nav {
-    /* Styles pour la nav sur desktop */
-}
 .main-nav ul {
     list-style: none;
     display: flex;
@@ -126,8 +124,8 @@ header .container {
     font-family: var(--font-primary);
     font-weight: 400;
     font-size: 1.1rem;
-    padding: 0.5rem 0.25rem; /* Ajout d'un peu de padding pour une meilleure zone de clic */
-    padding-bottom: 5px; /* Conserve ton padding-bottom */
+    padding: 0.5rem 0.25rem;
+    padding-bottom: 5px;
     border-bottom: 2px solid transparent;
     transition: color 0.3s ease, border-bottom-color 0.3s ease;
     display: block;
@@ -138,9 +136,8 @@ header .container {
     border-bottom-color: var(--neon-blue);
 }
 
-/* Bouton pour ouvrir/fermer la navigation sur mobile */
 .nav-toggle {
-    display: none; /* Caché par défaut sur les grands écrans */
+    display: none;
     background: transparent;
     border: 1px solid var(--neon-blue);
     color: var(--neon-blue);
@@ -148,19 +145,20 @@ header .container {
     padding: 0.5rem 0.75rem;
     border-radius: 5px;
     cursor: pointer;
-    /* Pas besoin de position absolute si on utilise flexbox dans header .container sur mobile */
-    z-index: 1100; /* Au-dessus de la nav déroulante */
+    z-index: 1100;
 }
 .nav-toggle:hover {
     background-color: var(--neon-blue-transparent-medium);
 }
 
-
-/* Effet Néon pour Texte (utilisé pour les titres H1 et H2 de section) */
-.neon-text { /* Cette classe est déjà sur tes H1 et H2 */
-    /* color: var(--neon-blue); */ /* Déjà défini dans h3 si .neon-text est aussi sur h3 */
-    /* text-shadow: 0 0 0.5px var(--neon-blue), 0 0 5px var(--neon-blue), 0 0 10px rgba(0, 191, 255, 0.7); */
+/* Effet Néon pour Texte (titres H1 de section, H2 de section) */
+/* La classe .neon-text est sur les H1 et H2. h3.tab-content-title a son propre style néon. */
+/* Si tu veux que TOUS les h1,h2 soient néon par défaut, tu peux le mettre directement sur les balises */
+h1.neon-text, h2.neon-text {
+    color: var(--neon-blue); /* Assure que la couleur est bien appliquée */
+    text-shadow: 0 0 1px var(--neon-blue), 0 0 6px var(--neon-blue), 0 0 12px rgba(0, 191, 255, 0.7);
 }
+
 
 /* Section Héros */
 #hero {
@@ -170,12 +168,12 @@ header .container {
     justify-content: center;
     text-align: center;
     position: relative;
-    padding-top: 80px; /* Hauteur du header pour décaler le contenu */
-    background-image: url('Image/skeleton-site.png'); /* CHEMIN À VÉRIFIER SOIGNEUSEMENT (CASSE INCLUSE) */
+    padding-top: 80px;
+    background-image: url('Image/skeleton-site.png');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    background-attachment: fixed; /* Peut causer des soucis sur mobile, voir media query */
+    background-attachment: fixed;
 }
 
 .hero-background-overlay {
@@ -191,10 +189,10 @@ header .container {
 .hero-content {
     position: relative;
     z-index: 2;
-    padding: 20px; /* Ajout de padding pour éviter que le texte ne colle aux bords sur très petits écrans */
+    padding: 20px;
 }
 
-#hero h1 {
+#hero h1 { /* Titre H1 spécifique au héros */
     font-size: 3.8rem;
     margin-bottom: 0.5rem;
 }
@@ -230,14 +228,14 @@ header .container {
     padding: 80px 0;
     background-color: var(--dark-secondary-bg);
 }
-.content-section:nth-child(even) {
+.content-section:nth-child(even) { /* Note: #about est le 2e enfant de main, donc var(--dark-bg) */
    background-color: var(--dark-bg);
 }
 
-.content-section h2 {
+.content-section h2 { /* Titres H2 de section */
     text-align: center;
     font-size: 2.8rem;
-    margin-bottom: 3.5rem;
+    margin-bottom: 2.5rem; /* Réduit un peu pour moins d'espace avant les onglets */
 }
 
 /* Effet Verre Dépoli (Glassmorphism) */
@@ -251,74 +249,253 @@ header .container {
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* Section À Propos */
-.about-content {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    margin-bottom: 3rem;
-}
-.artist-photo {
-    width: 250px;
-    height: 250px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 3px solid var(--neon-blue);
-    flex-shrink: 0;
-    box-shadow: 0 0 15px var(--neon-blue-transparent-medium);
-}
-.about-content p {
-    flex: 1;
-    font-size: 1.1rem;
+/* --- NOUVEAUX STYLES POUR LA SECTION "À PROPOS" AVEC ONGLETS --- */
+.tabs-container {
+    margin-top: 1.5rem; /* Espace entre le H2 de section et les onglets */
 }
 
-/* SECTION PARCOURS */
-.parcours-section {
-    margin-top: 4rem;
-}
-.parcours-section h3 {
-    text-align: left;
-    margin-bottom: 2rem;
-}
-.parcours-content {
+.tab-buttons {
     display: flex;
-    align-items: flex-start;
-    gap: 40px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--neon-blue-transparent-medium);
+    overflow-x: auto;
+    /* --- NOUVEAU : Cacher la barre de scroll --- */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE 10+ */
 }
-.parcours-text {
-    flex: 1;
-    order: 1;
+/* --- NOUVEAU : Cacher la barre de scroll pour Chrome, Safari, Edge --- */
+.tab-buttons::-webkit-scrollbar {
+    display: none;
 }
-.parcours-text p {
-    font-size: 1rem;
-    line-height: 1.7;
+
+
+.tab-button {
+    background: transparent;
+    border: none;
+    /* padding: 12px 22px; Ancien padding */
+    /* --- MODIFIÉ : Plus de padding horizontal pour plus de longueur --- */
+    padding: 12px 30px; /* Augmente le 22px à 30px ou plus selon ton goût */
+    cursor: pointer;
+    color: var(--light-text);
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    font-weight: 400;
+    position: relative;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    white-space: nowrap;
+    /* --- OPTIONNEL : Pour que les boutons se répartissent si peu nombreux --- */
+    /* Si tu as peu d'onglets et que tu veux qu'ils prennent plus de place : */
+    /* flex-grow: 1; */ /* Décommente si tu veux cet effet */
+    /* text-align: center; */ /* Assure que le texte est centré si flex-grow est utilisé */
 }
-.parcours-text strong {
+.tab-button:hover {
+    color: var(--neon-blue);
+    background-color: var(--neon-blue-transparent-light);
+}
+.tab-button.active {
     color: var(--neon-blue);
     font-weight: 700;
-    display: inline-block;
-    margin-bottom: 0.5rem;
+}
+.tab-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--neon-blue);
+    box-shadow: 0 0 8px var(--neon-blue);
 }
 
-.images-container {
-    flex-basis: 320px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    order: 2;
-    align-self: stretch;
+.tab-content {
+    display: none;
+    padding-top: 10px; /* Espace au dessus du contenu de l'onglet */
+    animation: fadeInTab 0.6s ease-out;
 }
-.images-container .formation-image {
+.tab-content.active {
+    display: block;
+}
+@keyframes fadeInTab {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Titre à l'intérieur de chaque onglet (remplace les anciens h3 de parcours) */
+h3.tab-content-title {
+    font-size: 1.8rem;
+    color: var(--neon-blue);
+    text-shadow: 0 0 0.5px var(--neon-blue), 0 0 4px var(--neon-blue); /* Ombre néon plus subtile pour les titres d'onglet */
+    margin-bottom: 1.8rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--neon-blue-transparent-light);
+}
+
+/* Onglet: Qui suis-je ? */
+.about-intro-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 35px; /* Un peu plus d'espace */
+}
+.about-intro-image-container {
+    flex-basis: 200px; /* AJUSTÉ : Plus petit */
+    flex-shrink: 0;
+}
+.about-intro-photo {
     width: 100%;
     height: auto;
-    max-height: 200px;
+    max-height: 260px; /* AJUSTÉ : Limite en hauteur */
     object-fit: cover;
     border-radius: 8px;
     border: 2px solid var(--neon-blue-transparent-medium);
+    box-shadow: 0 0 12px var(--neon-blue-transparent-light);
+}
+.about-intro-text {
+    flex: 1;
+}
+/* Le h3 de .about-intro-text est maintenant .tab-content-title, sauf si tu as un autre h3 spécifique ici.
+   S'il y a un h3 DANS .about-intro-text qui n'est PAS le .tab-content-title général : */
+.about-intro-text h3:not(.tab-content-title) {
+    font-size: 1.6rem; /* Ajuste si tu as un sous-titre spécifique pour le nom */
+    margin-bottom: 0.8rem;
+    color: var(--light-text);
+}
+.about-intro-text h3 .neon-highlight {
+     color: var(--neon-blue);
+     text-shadow: 0 0 5px var(--neon-blue);
+}
+.about-intro-text p {
+    font-size: 1.05rem; /* Légèrement plus grand pour la lisibilité */
+    line-height: 1.75;
+    margin-bottom: 1rem;
 }
 
-/* SECTION COMPÉTENCES */
-#competences .container h2 {
+/* Onglet: Mon Parcours */
+.parcours-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 25px;
+    padding: 15px 0; /* Padding vertical */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Ligne plus subtile */
+}
+.parcours-entry:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.parcours-entry-image-container {
+    flex-basis: 120px; /* AJUSTÉ : Plus petit pour le logo CFPM et photos d'xp */
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 70px; /* Pour assurer un minimum de hauteur même si l'image est petite */
+}
+.parcours-entry-logo { /* Spécifique pour logo CFPM */
+    max-width: 100%;
+    max-height: 140px; /* AJUSTÉ : Plus petit */
+    object-fit: contain;
+}
+.parcours-entry-photo { /* Pour les photos d'expérience */
+    width: 100%;
+    max-height: 140px; /* AJUSTÉ : Adapté au flex-basis plus petit */
+    object-fit: cover;
+    border-radius: 6px;
+}
+.parcours-entry-details {
+    flex: 1;
+}
+.parcours-entry-details.full-width {
+    flex-basis: 100%;
+}
+.parcours-entry-details h4 { /* Titres de chaque entrée de parcours */
+    font-size: 1.25rem; /* Un peu plus petit */
+    color: var(--light-text);
+    font-weight: 600; /* Moins que 700 pour hiérarchie */
+    margin-bottom: 0.4rem;
+}
+.parcours-entry-details p,
+.parcours-entry-details ul {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: #c5c5c5; /* Un peu plus clair que #ccc */
+    margin-bottom: 0.5rem;
+}
+.parcours-entry-details ul {
+    list-style-type: none; /* Ou 'disc' si tu préfères */
+    padding-left: 0; /* Si pas de list-style-type */
+}
+.parcours-entry-details ul li::before { /* Custom bullet */
+    content: "▹"; /* Ou autre symbole comme •, –, etc. */
+    color: var(--neon-blue);
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em; /* Si padding-left sur ul est 0 */
+    /* Si ul a padding-left: 20px, alors pas besoin de margin-left: -1em, juste 'margin-right: 0.5em;' */
+}
+
+
+/* Onglet: Mes Outils */
+.outils-intro {
+    font-size: 1rem;
+    color: #c5c5c5;
+    margin-bottom: 1.8rem;
+    text-align: left; /* Ou center si tu préfères */
+}
+.outils-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Cartes un peu plus petites */
+    gap: 25px;
+}
+.outil-card {
+    background-color: rgba(30, 30, 35, 0.6); /* Fond légèrement différent */
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid var(--neon-blue-transparent-light);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.outil-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 20px var(--neon-blue-transparent-medium);
+}
+.outil-screenshot-container,
+.outil-logo-container {
+    width: 100%;
+    height: 160px; /* AJUSTÉ : Hauteur pour screenshots/logos */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    background-color: rgba(0,0,0,0.25);
+    border-radius: 6px;
+    overflow: hidden;
+}
+.outil-screenshot {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.outil-logo {
+    max-width: 70%; /* Pour que le logo ne touche pas les bords du conteneur */
+    max-height: 70px; /* Logo plus petit et centré */
+    object-fit: contain;
+}
+.outil-description h4 { /* Titre de la carte outil */
+    font-size: 1.2rem;
+    color: var(--neon-blue);
+    margin-bottom: 0.6rem;
+}
+.outil-description p {
+    font-size: 0.9rem;
+    color: #b5b5b5;
+    line-height: 1.55;
+}
+/* FIN NOUVEAUX STYLES POUR "À PROPOS" AVEC ONGLETS */
+
+
+/* SECTION COMPÉTENCES (Styles existants, à vérifier pour cohérence) */
+#competences .container h2 { /* Assure que le H2 de section a le bon margin */
     margin-bottom: 3.5rem;
 }
 
@@ -329,8 +506,10 @@ header .container {
     margin-bottom: 0;
 }
 
-.subsection-title {
+.subsection-title { /* h3 dans compétences */
     font-size: 2.2rem;
+    color: var(--neon-blue); /* Assure la couleur néon si la classe .neon-text n'est pas toujours là */
+    text-shadow: 0 0 0.5px var(--neon-blue), 0 0 5px var(--neon-blue), 0 0 10px rgba(0, 191, 255, 0.7);
     margin-bottom: 2.5rem;
     text-align: left;
     padding-bottom: 0.8rem;
@@ -338,17 +517,17 @@ header .container {
 }
 
 /* Styles pour "Ma Musique" (single release) */
-.music-showcase .single-release-card {
+.music-showcase .single-release-card { /* .glass-effect est déjà dessus */
     display: flex;
+    /* padding: 25px; est déjà sur .glass-effect */
     flex-direction: row;
     align-items: center;
     gap: 40px;
-    padding: 25px;
 }
 .music-showcase .single-artwork {
-    flex-basis: 320px;
-    max-width: 320px;
-    height: 320px;
+    flex-basis: 300px; /* Un peu plus petit */
+    max-width: 300px;
+    height: 300px;
     object-fit: cover;
     border-radius: 8px;
     border: 2px solid var(--neon-blue-transparent-light);
@@ -358,8 +537,8 @@ header .container {
     flex: 1;
     text-align: left;
 }
-.music-showcase .single-details h4 {
-    font-size: 2.2rem;
+.music-showcase .single-details h4 { /* Titre du morceau */
+    font-size: 2rem; /* Un peu plus petit */
     color: var(--neon-blue);
     margin-bottom: 0.7rem;
     text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
@@ -372,7 +551,7 @@ header .container {
     margin-bottom: 1rem;
 }
 .music-showcase .single-details .release-description {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     margin-bottom: 1.5rem;
     line-height: 1.7;
     color: var(--light-text);
@@ -400,13 +579,14 @@ header .container {
 
 /* Styles pour les grilles de Productions et Graphisme */
 .production-grid,
-.graphisme-grid {
+.graphisme-grid { /* .glass-effect est déjà dessus */
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Cartes un peu plus petites */
+    gap: 25px; /* Espace un peu réduit */
+    /* padding: 25px; est déjà sur .glass-effect, pas besoin de le remettre ici */
 }
 
-.item-card {
+.item-card { /* Carte individuelle dans les grilles de prod/graphisme */
     background-color: rgba(35, 35, 40, 0.7);
     border-radius: 8px;
     overflow: hidden;
@@ -419,33 +599,35 @@ header .container {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0, 191, 255, 0.2);
 }
-.item-card img {
+.item-card img { /* Image en haut de la carte (graphisme) */
     width: 100%;
-    height: 220px;
+    height: 200px; /* Hauteur un peu réduite */
     object-fit: cover;
 }
-.item-card-content {
-    padding: 1.5rem;
+.item-card-content { /* Contenu texte de la carte */
+    padding: 1.25rem; /* Padding un peu ajusté */
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     text-align: left;
 }
-.item-card-content h4 {
+.item-card-content h4 { /* Titre dans la carte */
+    font-size: 1.4rem; /* Ajusté */
     margin-bottom: 0.5rem;
+    color: var(--light-text); /* Pas forcément néon ici pour varier */
 }
-.item-card-content p {
-    font-size: 0.95rem;
+.item-card-content p { /* Description dans la carte */
+    font-size: 0.9rem;
     color: #b0b0b0;
     margin-bottom: 1.2rem;
 }
 
-/* Styles pour le lecteur audio personnalisé */
+/* Styles pour le lecteur audio personnalisé (dans .item-card) */
 .audio-player-wrapper {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-top: auto;
+    margin-top: auto; /* Pousse en bas de la carte */
     padding-top: 12px;
     border-top: 1px solid var(--neon-blue-transparent-light);
 }
@@ -471,7 +653,7 @@ header .container {
 }
 .play-pause-button i {
     display: block;
-    line-height: 1;
+    line-height: 1; /* Pour un meilleur centrage de l'icône */
 }
 .waveform-container {
     flex-grow: 1;
@@ -488,16 +670,15 @@ header .container {
     width: 100%;
     height: 100%;
 }
-.progress-bar-container {
+.progress-bar-container { /* Inutilisé actuellement car waveform dessine la progression */
     display: none;
 }
-/* .progress-bar { ... }  Inutile si conteneur est display:none */
 .time-display {
     font-size: 0.85rem;
     color: #b0b0b0;
-    min-width: 75px;
+    min-width: 75px; /* Pour "0:00 / 0:00" */
     text-align: right;
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: tabular-nums; /* Alignement des chiffres */
     flex-shrink: 0;
 }
 
@@ -506,15 +687,15 @@ header .container {
     display: inline-block;
     background-color: transparent;
     color: var(--neon-blue);
-    padding: 10px 22px;
+    padding: 10px 20px; /* Padding un peu ajusté */
     border-radius: 5px;
     font-family: var(--font-primary);
     font-weight: 600;
     border: 2px solid var(--neon-blue);
     transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
     text-decoration: none;
-    margin-top: auto;
-    align-self: flex-start;
+    margin-top: auto; /* Pousse en bas */
+    align-self: flex-start; /* Aligné à gauche */
     text-align: center;
 }
 .item-card .view-button:hover {
@@ -524,10 +705,11 @@ header .container {
 }
 
 /* Section Contact */
-.contact-details {
+.contact-details { /* .glass-effect est déjà dessus */
     max-width: 700px;
-    margin: 0 auto 2rem auto;
+    margin: 0 auto; /* Centré */
     text-align: center;
+    /* padding: 25px; est déjà sur .glass-effect */
 }
 .contact-details p {
     margin-bottom: 1rem;
@@ -537,7 +719,7 @@ header .container {
     color: var(--neon-blue);
 }
 .contact-details a {
-    font-weight: normal;
+    font-weight: normal; /* Pour que le lien ne soit pas en gras par défaut */
     color: var(--light-text);
     text-decoration: underline;
     text-decoration-color: var(--neon-blue-transparent-medium);
@@ -545,21 +727,6 @@ header .container {
 .contact-details a:hover {
     color: var(--neon-blue);
     text-decoration-color: var(--neon-blue);
-}
-
-.social-links {
-    text-align: center;
-    margin-top: 1rem;
-}
-.social-links a {
-    margin: 0 10px;
-    font-size: 1.2rem;
-    display: inline-block;
-    padding: 5px;
-}
-.social-links a:hover {
-    color: white;
-    text-shadow: 0 0 5px var(--neon-blue);
 }
 
 /* Footer */
@@ -574,78 +741,63 @@ footer {
 /* --- STYLES RESPONSIVES --- */
 @media (max-width: 768px) {
     header .container {
-        flex-direction: row; /* Logo à gauche, burger à droite */
+        flex-direction: row;
         justify-content: space-between;
-        /* position: relative; est déjà sur header .container (pas besoin de le répéter ici) */
     }
 
     .nav-toggle {
-        display: flex; /* Utilise flex pour mieux centrer l'icône à l'intérieur */
+        display: flex;
         align-items: center;
         justify-content: center;
-        /* Le positionnement absolu n'est plus nécessaire si le header .container utilise space-between */
-        /* Si tu veux le coller à droite :
-        margin-left: auto;
-        right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        position: static; (ou ne pas le mettre en absolute plus haut)
-        */
     }
 
     .main-nav {
-        display: none; /* Caché par défaut sur mobile */
+        display: none;
         position: absolute;
-        top: 100%; /* Se positionne juste en dessous du header */
+        top: 100%;
         left: 0;
         right: 0;
-        background-color: rgba(10, 10, 10, 0.97); /* Fond un peu plus opaque */
-        backdrop-filter: blur(10px); /* Flou plus prononcé */
-        border-top: 1px solid var(--neon-blue); /* Bordure néon plus visible */
-        padding: 0; /* Le padding sera sur les li > a */
-        z-index: 1050; /* En dessous du nav-toggle mais au-dessus du reste */
-        box-shadow: 0 5px 15px rgba(0, 191, 255, 0.1); /* Ombre néon subtile */
+        background-color: rgba(10, 10, 10, 0.97);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid var(--neon-blue);
+        padding: 0;
+        z-index: 1050;
+        box-shadow: 0 5px 15px rgba(0, 191, 255, 0.1);
     }
-
-    .main-nav.nav-open { /* Classe ajoutée par JS pour afficher le menu */
+    .main-nav.nav-open {
         display: block;
     }
-
     .main-nav ul {
         flex-direction: column;
-        align-items: stretch; /* Les liens prennent toute la largeur */
+        align-items: stretch;
         width: 100%;
     }
-
     .main-nav ul li {
         margin: 0;
         width: 100%;
         text-align: center;
     }
-
     .main-nav ul li a {
-        padding: 1rem 1.5rem; /* Padding uniforme */
+        padding: 1rem 1.5rem;
         width: 100%;
         border-bottom: 1px solid var(--neon-blue-transparent-light);
-        font-size: 1.2rem; /* Liens un peu plus grands */
+        font-size: 1.2rem;
     }
     .main-nav ul li:last-child a {
         border-bottom: none;
     }
-
     .main-nav ul li a:hover,
     .main-nav ul li a.active {
-        background-color: var(--neon-blue-transparent-medium); /* Hover plus visible */
+        background-color: var(--neon-blue-transparent-medium);
         color: var(--neon-blue);
-        border-bottom-color: var(--neon-blue-transparent-light); /* Ou la même couleur que le hover */
+        border-bottom-color: var(--neon-blue-transparent-light);
     }
 
     /* Section Hero sur mobile */
     #hero {
-        background-attachment: scroll; /* Important pour éviter les problèmes de fixed sur mobile */
-        /* Si l'image ne s'affiche toujours pas, ré-déclarer explicitement : */
+        background-attachment: scroll;
         background-image: url('Image/skeleton-site.png');
-        min-height: 80vh; /* Peut-être réduire un peu la hauteur sur mobile */
+        min-height: 80vh;
     }
     #hero h1 {
         font-size: 2.8rem;
@@ -654,47 +806,88 @@ footer {
         font-size: 1.3rem;
     }
 
-    /* Autres ajustements responsives */
+    /* Titres de section H2 sur mobile */
     .content-section h2 {
         font-size: 2.2rem;
+        margin-bottom: 2rem; /* Réduit l'espace avant les onglets/contenu */
     }
 
-    .about-content {
+    /* --- AJUSTEMENTS RESPONSIVE POUR LES ONGLETS #ABOUT --- */
+    .tab-buttons {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        /* padding-bottom: 5px; /* Plus nécessaire si la scrollbar est cachée */
+        /* La scrollbar est déjà cachée par les règles ci-dessus, pas besoin de répéter ici */
+    }
+    .tab-button {
+        white-space: nowrap;
+        font-size: 1rem;
+        /* padding: 10px 15px; Ancien padding mobile */
+        /* --- MODIFIÉ : Padding horizontal mobile aussi --- */
+        padding: 10px 20px; /* Ou ajuste selon besoin sur mobile */
+    }
+
+    .about-intro-layout {
         flex-direction: column;
         align-items: center;
         text-align: center;
     }
-    .artist-photo {
-        margin-bottom: 1.5rem;
-        width: 180px;
-        height: 180px;
+    .about-intro-image-container {
+        flex-basis: auto;
+        width: 160px; /* Photo profil plus petite sur mobile */
+        margin-bottom: 20px;
+    }
+    .about-intro-photo {
+        max-height: 200px;
+    }
+    .about-intro-text h3:not(.tab-content-title) { /* Si titre de nom spécifique */
+        text-align: center;
     }
 
-    .parcours-content {
+    .parcours-entry {
         flex-direction: column;
         align-items: center;
         text-align: center;
     }
-    .parcours-text {
-        order: 2;
-        margin-top: 1.5rem;
+    .parcours-entry-image-container {
         flex-basis: auto;
+        width: 100px; /* Logo CFPM encore plus petit sur mobile */
+        max-width: 100px;
+        margin-bottom: 15px;
     }
-    .images-container {
-        order: 1;
-        flex-basis: auto;
-        width: 90%;
-        max-width: 300px;
+    .parcours-entry-logo {
+        max-height: 60px;
     }
-    .parcours-section h3 {
+    .parcours-entry-photo { /* Photo expérience */
+         width: 80%;
+         max-width: 200px; /* Limiter la largeur */
+         max-height: 120px;
+    }
+    .parcours-entry-details h4 {
         text-align: center;
+        font-size: 1.15rem;
     }
 
+    .outils-grid {
+        grid-template-columns: 1fr; /* Une carte par ligne */
+    }
+    .outil-screenshot-container,
+    .outil-logo-container {
+        height: 140px;
+    }
+    .outil-description {
+        text-align: center;
+    }
+    /* --- FIN AJUSTEMENTS RESPONSIVE POUR ONGLETS #ABOUT --- */
+
+
+    /* Titres de sous-section H3 (dans Compétences) */
     .subsection-title {
-        font-size: 2rem;
-        text-align: center; /* Centre les titres de sous-section sur mobile */
+        font-size: 1.8rem; /* Plus petit sur mobile */
+        text-align: center;
     }
 
+    /* Carte musique */
     .music-showcase .single-release-card {
         flex-direction: column;
         text-align: center;
@@ -702,47 +895,49 @@ footer {
     }
     .music-showcase .single-artwork {
         flex-basis: auto;
-        width: 80%;
-        max-width: 280px;
+        width: 70%;
+        max-width: 250px; /* Pochette un peu plus petite */
         height: auto;
     }
     .music-showcase .single-details h4 {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 
+    /* Grilles de prod et graphisme */
     .production-grid,
     .graphisme-grid {
-        grid-template-columns: 1fr;
-        gap: 25px;
+        grid-template-columns: 1fr; /* Une carte par ligne */
+        gap: 20px;
     }
-    .item-card img {
-        height: 200px;
+    .item-card img { /* Image carte graphisme */
+        height: 180px;
     }
     .item-card-content {
-        padding: 1.2rem;
-        text-align: center; /* Centre le contenu des cartes sur mobile */
+        padding: 1rem;
+        text-align: center;
     }
     .item-card-content h4 {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
     .item-card .view-button {
-        align-self: center; /* Centre le bouton "Voir en Grand" */
+        align-self: center;
     }
 
+    /* Lecteur audio */
     .audio-player-wrapper {
-        gap: 10px;
-        /* flex-wrap: wrap; Optionnel si l'espace est très limité */
+        gap: 8px;
+        /* flex-wrap: wrap; /* Décommenter si besoin de passer à la ligne */
     }
     .waveform-container {
-        height: 45px;
+        height: 40px; /* Plus petit */
     }
     .play-pause-button {
         width: 40px;
         height: 40px;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
     .time-display {
-       font-size: 0.8rem;
-       min-width: 65px;
+       font-size: 0.75rem;
+       min-width: 60px;
     }
 }
