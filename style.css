@@ -959,4 +959,14 @@ footer {
        font-size: 0.75rem;
        min-width: 60px;
     }
+
+    .contact-layout {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .contact-photo img {
+        max-width: 120px;
+    }
 }
