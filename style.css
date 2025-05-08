@@ -728,6 +728,25 @@ h3.tab-content-title {
     color: var(--neon-blue);
     text-decoration-color: var(--neon-blue);
 }
+.contact-layout {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* espace entre la photo et le texte */
+    flex-wrap: wrap; /* pour que ça passe bien sur mobile */
+}
+
+.contact-photo img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 10px; /* arrondi des coins */
+    object-fit: cover;
+}
+
+.contact-text {
+    flex: 1;
+    min-width: 250px;
+}
+
 
 /* Footer */
 footer {
