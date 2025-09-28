@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIAN</title>
+    <link rel="stylesheet" href="style-cian.css"> 
+     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+    <!-- Font Awesome pour les icônes Play/Pause -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">Retour</a>
+        </div>
+    </header>
+    <main>
+        <!-- Section Identification -->
+        <section id="identification" class="content-section">
+            <div class="container">
+                <div class="identification-header">
+                    <p><strong>Darcel Nathan</strong></p>
+                    <p>Distanciel</p>
+                    <p>2025/2026</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Activités -->
+        <section id="activites" class="content-section">
+            <div class="container">
+                <h1>Exemple Activités</h1>
+                <article class="activite">
+                    <h2>Octobre 2024</h2>
+                    <p><strong>Activité :</strong> Captation concert</p>
+                    <p><strong>Lieu :</strong> Bonjour Minuit</p>
+                    <p><strong>Rôle :</strong> Cadreur et prise son</p>
+                    <div class="media">
+                        <img src="images/concert.jpg" alt="Photo du concert">
+                        <audio controls>
+                            <source src="audio/concert.mp3" type="audio/mpeg">
+                            Votre navigateur ne supporte pas l'élément audio.
+                        </audio>
+                        <p><a href="https://exemple.com" target="_blank">Lien vers plus de détails</a></p>
+                    </div>
+                </article>
+                <!-- Ajoutez d'autres activités ici -->
+            </div>
+        </section>
+
+        <!-- Section Stage -->
+        <section id="stage" class="content-section">
+            <div class="container">
+                <h1> Exemple de Stage</h1>
+                <article class="presentation-entreprise">
+                    <h2>Présentation de l'entreprise</h2>
+                    <p><strong>Nom :</strong> [Nom de l'entreprise]</p>
+                    <p><strong>Description :</strong> [Brève description de l'entreprise]</p>
+                    <p><a href="[Lien vers le site de l'entreprise]" target="_blank">Site web de l'entreprise</a></p>
+                </article>
+                <article class="rapport-hebdomadaire">
+                    <h2>Rapport Hebdomadaire</h2>
+                    <h3>Semaine 1</h3>
+                    <ul>
+                        <li><strong>Tâches effectuées :</strong> [Liste des tâches]</li>
+                        <li><strong>Compétences mises en œuvre :</strong> [Liste des compétences]</li>
+                        <li><strong>Annexes :</strong> [Liens ou fichiers annexes]</li>
+                    </ul>
+                    <h3>Semaine 2</h3>
+                    <ul>
+                        <li><strong>Tâches effectuées :</strong> [Liste des tâches]</li>
+                        <li><strong>Compétences mises en œuvre :</strong> [Liste des compétences]</li>
+                        <li><strong>Annexes :</strong> [Liens ou fichiers annexes]</li>
+                    </ul>
+                    <!-- Ajoutez d'autres semaines ici -->
+                </article>
+                <article class="bilan">
+                    <h2>Bilan</h2>
+                    <p>[Résumé du bilan]</p>
+                    <!--<a href="bilan.pdf" download>Télécharger le bilan en PDF</a>-->
+                </article>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; <span id="currentYear"></span> Votre Site</p>
+    </footer>
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
