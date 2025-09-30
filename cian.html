@@ -1,93 +1,269 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CIAN</title>
-    <link rel="stylesheet" href="style-cian.css"> 
-     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
-    <!-- Font Awesome pour les icônes Play/Pause -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CIAN</title>
+  <link rel="stylesheet" href="style-cian.css">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;700&family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <a href="index.html" class="logo">Retour</a>
+  <header>
+    <div class="container">
+      <a href="index.html" class="logo">Retour</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Identification -->
+    <section id="identification" class="content-section">
+      <div class="container" id="identification-container">
+        <div class="identification-header">
+          <p><strong>Darcel Nathan</strong></p>
+          <p>Distanciel</p>
+          <p>2025/2026</p>
         </div>
-    </header>
-    <main>
-        <!-- Section Identification -->
-        <section id="identification" class="content-section">
-            <div class="container">
-                <div class="identification-header">
-                    <p><strong>Darcel Nathan</strong></p>
-                    <p>Distanciel</p>
-                    <p>2025/2026</p>
-                </div>
-            </div>
-        </section>
+      </div>
+    </section>
 
-        <!-- Section Activités -->
-        <section id="activites" class="content-section">
-            <div class="container">
-                <h1>Exemple Activités</h1>
-                <article class="activite">
-                    <h2>Octobre 2024</h2>
-                    <p><strong>Activité :</strong> Captation concert</p>
-                    <p><strong>Lieu :</strong> Bonjour Minuit</p>
-                    <p><strong>Rôle :</strong> Cadreur et prise son</p>
-                    <div class="media">
-                        <img src="images/concert.jpg" alt="Photo du concert">
-                        <audio controls>
-                            <source src="audio/concert.mp3" type="audio/mpeg">
-                            Votre navigateur ne supporte pas l'élément audio.
-                        </audio>
-                        <p><a href="https://exemple.com" target="_blank">Lien vers plus de détails</a></p>
-                    </div>
-                </article>
-                <!-- Ajoutez d'autres activités ici -->
-            </div>
-        </section>
+    <!-- Activités -->
+    <section id="activites" class="content-section">
+      <div class="container" id="activites-container">
+        <!-- Activités insérées dynamiquement -->
+      </div>
+    </section>
 
-        <!-- Section Stage -->
-        <section id="stage" class="content-section">
-            <div class="container">
-                <h1> Exemple de Stage</h1>
-                <article class="presentation-entreprise">
-                    <h2>Présentation de l'entreprise</h2>
-                    <p><strong>Nom :</strong> [Nom de l'entreprise]</p>
-                    <p><strong>Description :</strong> [Brève description de l'entreprise]</p>
-                    <p><a href="[Lien vers le site de l'entreprise]" target="_blank">Site web de l'entreprise</a></p>
-                </article>
-                <article class="rapport-hebdomadaire">
-                    <h2>Rapport Hebdomadaire</h2>
-                    <h3>Semaine 1</h3>
-                    <ul>
-                        <li><strong>Tâches effectuées :</strong> [Liste des tâches]</li>
-                        <li><strong>Compétences mises en œuvre :</strong> [Liste des compétences]</li>
-                        <li><strong>Annexes :</strong> [Liens ou fichiers annexes]</li>
-                    </ul>
-                    <h3>Semaine 2</h3>
-                    <ul>
-                        <li><strong>Tâches effectuées :</strong> [Liste des tâches]</li>
-                        <li><strong>Compétences mises en œuvre :</strong> [Liste des compétences]</li>
-                        <li><strong>Annexes :</strong> [Liens ou fichiers annexes]</li>
-                    </ul>
-                    <!-- Ajoutez d'autres semaines ici -->
-                </article>
-                <article class="bilan">
-                    <h2>Bilan</h2>
-                    <p>[Résumé du bilan]</p>
-                    <!--<a href="bilan.pdf" download>Télécharger le bilan en PDF</a>-->
-                </article>
+    <!-- Stage -->
+    <section id="stage" class="content-section">
+      <div class="container" id="stage-container">
+        <h1> Exemple de Stage</h1>
+        <article class="presentation-entreprise"></article>
+        <article class="rapport-hebdomadaire"></article>
+        <article class="bilan">
+          <h2>Bilan</h2>
+          <p>[Résumé du bilan]</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="currentYear"></span> Votre Site</p>
+  </footer>
+
+  <script>
+    // année courante
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+  /* -------------------------
+     Helper : construction URL média (robuste)
+     ------------------------- */
+  const apiBase = 'http://localhost:3000/api';
+
+  function makeMediaUrl(file) {
+    if (!file) return '';
+    const f = (typeof file === 'string') ? { url: file } : file;
+    const candidate = f.url || f.path || f?.data?.url || '';
+    if (!candidate) return '';
+    if (candidate.startsWith('http://') || candidate.startsWith('https://')) return candidate;
+    return `http://localhost:3000${candidate.startsWith('/') ? '' : '/'}${candidate}`;
+  }
+
+  /* -------------------------
+     markMediaBlocks() :
+     ajoute/retire .has-media aux articles
+     ------------------------- */
+  function markMediaBlocks() {
+    document.querySelectorAll('.activite, .presentation-entreprise, .rapport-hebdomadaire, .bilan')
+      .forEach(block => {
+        const hasImg = !!block.querySelector('.media img');
+        const hasAudio = !!block.querySelector('.media audio');
+        const hasLink = !!block.querySelector('.media a');
+        if (hasImg || hasAudio || hasLink) block.classList.add('has-media');
+        else block.classList.remove('has-media');
+      });
+  }
+
+  // debounce util
+  function debounce(fn, ms = 100) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(()=> fn(...args), ms);
+    };
+  }
+
+  // observe changes in main to update classes when content injected async
+  document.addEventListener('DOMContentLoaded', () => {
+    markMediaBlocks();
+    const main = document.querySelector('main');
+    if (main) {
+      const obs = new MutationObserver(debounce(markMediaBlocks, 80));
+      obs.observe(main, { childList: true, subtree: true });
+    }
+  });
+
+  /* -------------------------
+     Rendu activites (on génère une structure stable :
+     <article class="activite">
+       <div class="content"> ... texte ... </div>
+       <div class="media"> ... img / audio ...</div>
+     </article>
+     ------------------------- */
+  async function fetchActivites() {
+    try {
+      const response = await fetch(`${apiBase}/activites?depth=1`);
+      if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+      const data = await response.json();
+      const activities = data.docs || [];
+
+      const container = document.getElementById('activites-container');
+      container.innerHTML = '<h1>Activités</h1>';
+
+      if (activities.length === 0) {
+        container.innerHTML += '<p>Aucune activité n\'est disponible pour le moment.</p>';
+        markMediaBlocks();
+        return;
+      }
+
+      activities.forEach(act => {
+        // photos html
+        const photosHtml = (act.photos || []).map(p => {
+          const file = (typeof p === 'string') ? { url: p } : p;
+          const url = makeMediaUrl(file);
+          return url ? `<img src="${url}" alt="${(file.alt || "Photo de l'activité").replace(/"/g, '&quot;')}" />` : '';
+        }).join('');
+
+        // audio html
+        const audioHtml = act.audio ? `<audio controls src="${makeMediaUrl(act.audio)}"></audio>` : '';
+
+        //const liensHtml = act.liens ? `<p><a href="${act.liens}" target="_blank" rel="noopener">${act.liens}</a></p>` : '';
+
+        // construction stable : content + media
+        container.innerHTML += `
+          <article class="activite">
+            <div class="content">
+              <h2>${act.mois || ''}</h2>
+              <p><strong>Activité :</strong> ${act.description || ''}</p>
+              <p><strong>Lieu :</strong> ${act.lieu || '-'}</p>
+              <p><strong>Rôle :</strong> ${act.role || '-'}</p>
             </div>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; <span id="currentYear"></span> Votre Site</p>
-    </footer>
-    <script>
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-    </script>
+            <div class="media">
+              ${photosHtml}
+              ${audioHtml}
+              
+            </div>
+          </article>
+        `;
+      });
+
+      // important : après injection on marque les blocs
+      markMediaBlocks();
+
+    } catch (err) {
+      console.error('Erreur Activités:', err);
+      document.getElementById('activites-container').innerHTML = '<p>Erreur lors du chargement des activités.</p>';
+    }
+  }
+
+  /* -------------------------
+     Rendu stages (même pattern : content + media)
+     ------------------------- */
+  async function fetchStages() {
+    try {
+      const response = await fetch(`${apiBase}/stage?depth=1`);
+      if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+      const data = await response.json();
+      const stages = data.docs || [];
+
+      const container = document.getElementById('stage-container');
+      container.innerHTML = '<h1>Stages</h1>';
+
+      if (stages.length === 0) {
+        container.innerHTML += '<p>Aucun stage n\'est disponible pour le moment.</p>';
+        markMediaBlocks();
+        return;
+      }
+
+      stages.forEach(stage => {
+        // photos for stage (if you add photos in Payload)
+        const photosHtml = (stage.photos || []).map(p => {
+          const file = (typeof p === 'string') ? { url: p } : p;
+          const url = makeMediaUrl(file);
+          return url ? `<img src="${url}" alt="${(file.alt || 'Photo stage').replace(/"/g, '&quot;')}" />` : '';
+        }).join('');
+
+        const bilanPdfHtml = stage.bilan_pdf ? `<a href="${makeMediaUrl(stage.bilan_pdf)}" download>Télécharger le bilan en PDF</a>` : '';
+
+        // build semaines HTML
+        const semainesHtml = (stage.semaine || []).map(s => {
+          const annexesHtml = (s.annexes || []).map(a => {
+            const file = (typeof a === 'string') ? { url: a, filename: a } : a;
+            const url = makeMediaUrl(file);
+            const filename = file.filename || file.name || 'Annexe';
+            return url ? `<a href="${url}" download>${filename}</a>` : '';
+          }).join(', ') || 'Aucune annexe';
+
+          return `
+            <div class="week">
+              <h3>Semaine ${s.numero || ''}</h3>
+              <ul>
+                <li><strong>Tâches :</strong> ${s.taches || '-'}</li>
+                <li><strong>Compétences :</strong> ${s.competences || '-'}</li>
+                <li><strong>Annexes :</strong> ${annexesHtml}</li>
+              </ul>
+            </div>
+          `;
+        }).join('');
+
+        container.innerHTML += `
+          <article class="presentation-entreprise">
+            <div class="content">
+              <h2>Présentation de l'entreprise</h2>
+              <p><strong>Nom :</strong> ${stage.nom_entreprise || ''}</p>
+              <p><strong>Description :</strong> ${stage.description || ''}</p>
+              ${stage.lien ? `<p><a href="${stage.lien}" target="_blank" rel="noopener">Site web de l'entreprise</a></p>` : ''}
+            </div>
+            <div class="media">
+              ${photosHtml}
+            </div>
+          </article>
+
+          <article class="rapport-hebdomadaire">
+            <div class="content">
+              <h2>Rapport Hebdomadaire</h2>
+              ${semainesHtml || '<p>Aucun rapport hebdomadaire disponible.</p>'}
+            </div>
+            <div class="media"></div>
+          </article>
+
+          <article class="bilan">
+            <div class="content">
+              <h2>Bilan</h2>
+              <p>${stage.bilan || 'Pas de bilan disponible.'}</p>
+              ${bilanPdfHtml}
+            </div>
+            <div class="media"></div>
+          </article>
+        `;
+      });
+
+      markMediaBlocks();
+
+    } catch (err) {
+      console.error('Erreur Stage:', err);
+      document.getElementById('stage-container').innerHTML = '<p>Erreur lors du chargement des stages.</p>';
+    }
+  }
+
+  // Lancer au chargement
+  document.addEventListener('DOMContentLoaded', () => {
+    fetchActivites();
+    fetchStages();
+  });
+  </script>
 </body>
 </html>

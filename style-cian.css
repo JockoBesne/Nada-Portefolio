@@ -1,188 +1,170 @@
-
 :root {
-    --dark-bg: #0A0A0A;
-    --dark-secondary-bg: #121212;
-    --light-text: #E0E0E0;
-    --neon-blue: #00BFFF;
-    --neon-blue-transparent-light: rgba(0, 191, 255, 0.1);
-    --neon-blue-transparent-medium: rgba(0, 191, 255, 0.3);
-    --glass-bg: rgba(25, 25, 30, 0.5);
-    --waveform-bg: #282c34;
-    --waveform-played: var(--neon-blue);
-    --waveform-unplayed: #555b66;
-
-    --font-primary: 'Rajdhani', sans-serif;
-    --font-secondary: 'Open Sans', sans-serif;
+  --dark-bg: #0A0A0A;
+  --dark-secondary-bg: #121212;
+  --light-text: #E0E0E0;
+  --neon-blue: #00BFFF;
+  --neon-blue-transparent-medium: rgba(0,191,255,0.3);
+  --glass-bg: rgba(25,25,30,0.5);
+  --font-primary: 'Rajdhani', sans-serif;
+  --font-secondary: 'Open Sans', sans-serif;
 }
 
-body {
-    background-color: var(--dark-bg); /* Fond sombre comme la page principale */
-    color: var(--light-text); /* Texte clair */
-    font-family: var(--font-secondary);
-    line-height: 1.6;
-}
+/* global box-sizing */
+*, *::before, *::after { box-sizing: border-box; }
 
-h1, h2, h3 {
-    font-family: var(--font-primary);
-    color: var(--neon-blue); /* Couleur néon pour les titres */
-    text-shadow: 0 0 5px var(--neon-blue), 0 0 10px rgba(0, 191, 255, 0.7);
+/* base */
+body{
+  background-color: var(--dark-bg);
+  color: var(--light-text);
+  font-family: var(--font-secondary);
+  line-height: 1.6;
 }
+h1,h2,h3{ font-family:var(--font-primary); color:var(--neon-blue); margin:0 0 12px 0; text-shadow: 0 0 5px var(--neon-blue); }
+a{ color:var(--neon-blue); text-decoration:none; transition: color .2s; }
+a:hover{ color:#fff; }
 
-a {
-    color: var(--neon-blue);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
+.container{ max-width:1100px; margin:0 auto; padding:0 20px; }
 
-a:hover {
-    color: white;
-}
+/* ensure long words break */
+p, li, h2, .content { overflow-wrap:anywhere; word-break:break-word; }
 
-/* Conteneur général */
-.container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
+/* identification */
+#identification { padding:40px 0; background-color:var(--dark-secondary-bg); text-align:left; }
+.identification-header { font-size:1.8rem; font-weight:bold; color:var(--neon-blue); line-height:1.5; }
+.identification-header p{ margin:5px 0; }
 
-/* Section Identification */
-#identification {
-    padding: 40px 0;
-    background-color: var(--dark-secondary-bg); /* Fond secondaire */
-    text-align: left; /* Alignement à gauche */
-}
-
-.identification-header {
-    font-size: 1.8rem; /* Texte en gros */
-    font-weight: bold;
-    color: var(--neon-blue); /* Couleur néon pour correspondre au style principal */
-    text-align: left;
-    line-height: 1.5;
-}
-
-.identification-header p {
-    margin: 5px 0; /* Espacement entre les lignes */
-}
-
-/* Section Activités */
-#activites {
-    padding: 80px 0;
-    background-color: var(--dark-bg);
-}
-
-#activites h1 {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.activite {
-    margin-bottom: 40px;
-    padding: 20px;
-    background: var(--glass-bg);
-    border-radius: 10px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--neon-blue-transparent-medium);
-}
-
-.activite h2 {
-    font-size: 1.8rem;
-    margin-bottom: 10px;
-}
-
-.activite p {
-    margin-bottom: 10px;
-}
-
-.activite .media {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.activite .media img {
-    max-width: 100%;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-
-.activite .media audio {
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-/* Section Stage */
-#stage {
-    padding: 80px 0;
-    background-color: var(--dark-secondary-bg);
-}
-
-#stage h1 {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
+/* activites / stage blocks base */
+.activite,
 .presentation-entreprise,
 .rapport-hebdomadaire,
 .bilan {
-    margin-bottom: 40px;
-    padding: 20px;
-    background: var(--glass-bg);
-    border-radius: 10px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--neon-blue-transparent-medium);
+  display: grid;
+  grid-template-columns: 1fr; /* default: single column */
+  gap: 20px;
+  align-items: start;
+  margin-bottom: 40px;
+
+  padding: 20px;
+  background: var(--glass-bg);
+  border-radius: 10px;
+  border: 1px solid var(--neon-blue-transparent-medium);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.12);
+
+  overflow: hidden; /* avoid visual overflow */
 }
 
-.presentation-entreprise h2,
-.rapport-hebdomadaire h2,
-.bilan h2 {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
+/* use :has when available */
+@supports (selector(:has(.media))) {
+  .activite:has(.media),
+  .presentation-entreprise:has(.media),
+  .rapport-hebdomadaire:has(.media),
+  .bilan:has(.media) {
+    grid-template-columns: 1fr 220px;
+  }
 }
 
-.presentation-entreprise p,
-.rapport-hebdomadaire ul,
-.bilan p {
-    font-size: 1rem;
-    line-height: 1.8;
+/* fallback: js adds .has-media */
+.activite.has-media,
+.presentation-entreprise.has-media,
+.rapport-hebdomadaire.has-media,
+.bilan.has-media {
+  grid-template-columns: 1fr 220px;
 }
 
-.rapport-hebdomadaire ul {
-    list-style: none;
-    padding-left: 0;
+/* content column */
+.activite .content,
+.presentation-entreprise .content,
+.rapport-hebdomadaire .content,
+.bilan .content {
+  grid-column: 1;
 }
 
-.rapport-hebdomadaire ul li {
-    margin-bottom: 10px;
+/* media column on right, aligned to top */
+.activite > .media,
+.presentation-entreprise > .media,
+.rapport-hebdomadaire > .media,
+.bilan > .media {
+  grid-column: 2;
+  align-self: start;       /* align the media to the top of the article */
+  justify-self: end;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0;
 }
 
-.rapport-hebdomadaire ul li::before {
-    content: "▹";
-    color: var(--neon-blue);
-    margin-right: 10px;
+/* ensure non-media elements stay in left column */
+.activite > :not(.media),
+.presentation-entreprise > :not(.media),
+.rapport-hebdomadaire > :not(.media),
+.bilan > :not(.media) {
+  grid-column: 1;
 }
 
-.bilan a {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: var(--neon-blue);
-    color: var(--dark-bg);
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s ease, color 0.3s ease;
+/* image size and fitting */
+.media img {
+  width: 100%;
+  max-width: 220px;
+  max-height: 220px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
 }
 
-.bilan a:hover {
-    background-color: transparent;
-    color: var(--neon-blue);
-    box-shadow: 0 0 10px var(--neon-blue);
+/* audio fit */
+.media audio { width: 100%; }
+
+/* small annex links in media column */
+.media a { display:inline-block; padding:6px 10px; background: rgba(255,255,255,0.03); border-radius:6px; color:var(--light-text); text-decoration:none; }
+
+/* titles & paragraphs styling - keep readable */
+.activite h2, .presentation-entreprise h2, .rapport-hebdomadaire h2, .bilan h2 {
+  font-size: 1.6rem;
+  margin-bottom: 12px;
 }
 
-/* Footer */
-footer {
-    text-align: center;
-    padding: 20px 0;
-    background-color: var(--dark-bg);
-    border-top: 1px solid var(--neon-blue-transparent-medium);
-    font-size: 0.9rem;
+/* When there's no media, center the text area */
+.activite:not(.has-media) .content,
+.presentation-entreprise:not(.has-media) .content,
+.rapport-hebdomadaire:not(.has-media) .content,
+.bilan:not(.has-media) .content {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 900px;
 }
+
+/* when media present, prefer left-aligned text for readability */
+.activite.has-media .content,
+.presentation-entreprise.has-media .content,
+.rapport-hebdomadaire.has-media .content,
+.bilan.has-media .content {
+  text-align: left;
+}
+
+/* responsive: stack columns on small screens */
+@media (max-width: 720px) {
+  .activite,
+  .presentation-entreprise,
+  .rapport-hebdomadaire,
+  .bilan {
+    grid-template-columns: 1fr;
+  }
+
+  .activite > .media,
+  .presentation-entreprise > .media,
+  .rapport-hebdomadaire > .media,
+  .bilan > .media {
+    grid-column: 1;
+    grid-row: auto;
+    align-items: center;
+  }
+
+  .media img { max-width: 90%; max-height: 240px; }
+}
+
+/* footer */
+footer { text-align:center; padding:20px 0; background-color:var(--dark-bg); border-top:1px solid var(--neon-blue-transparent-medium); font-size:0.9rem; }
