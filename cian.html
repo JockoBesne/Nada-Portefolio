@@ -63,14 +63,15 @@
      ------------------------- */
   const apiBase = 'https://cmspayload-q0ln.onrender.com/api';
 
-
   function makeMediaUrl(file) {
     if (!file) return '';
     const f = (typeof file === 'string') ? { url: file } : file;
     const candidate = f.url || f.path || f?.data?.url || '';
     if (!candidate) return '';
     if (candidate.startsWith('http://') || candidate.startsWith('https://')) return candidate;
-    return `http://localhost:3000${candidate.startsWith('/') ? '' : '/'}${candidate}`;
+    // Utilisez la partie base de votre API Render, sans le /api
+    const mediaBaseUrl = 'https://cmspayload-q0ln.onrender.com'; // <--- CORRECTION ICI
+    return `${mediaBaseUrl}${candidate.startsWith('/') ? '' : '/'}${candidate}`;
   }
 
   /* -------------------------
