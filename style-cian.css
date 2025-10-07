@@ -27,35 +27,53 @@ body {
 
 /* Conteneur principal pour centrer le contenu */
 .container {
-    max-width: 1100px; /* Légèrement plus petit pour une meilleure lisibilité */
+    max-width: 1300px; /* Augmenté pour prendre plus de largeur */
     margin: 0 auto;
-    padding: 10px;
+    padding: 20px;
 }
 
 /* En-tête */
 header {
     background-color: var(--dark-secondary-bg);
-    padding: 10px 0; /* Réduit le padding pour rendre la bande plus fine */
+    padding: 15px 0; /* Padding légèrement augmenté pour le bouton */
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    position: sticky;
-    top: 0;
+    /* Retiré: position: sticky; pour que la barre ne défile plus */
+    /* Retiré: top: 0; */
     z-index: 100;
 }
 
+/* Style du bouton "Retour" */
 header .logo {
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 700;
-    font-size: 1.6rem; /* Taille de la police légèrement réduite pour s'adapter */
+    display: inline-flex; /* Utiliser flexbox pour centrer le contenu du bouton */
+    align-items: center;
+    gap: 8px; /* Espacement entre icône et texte */
+    padding: 10px 20px;
+    background: rgba(74, 144, 226, 0.2); /* Fond semi-transparent */
+    border-radius: 25px; /* Bords très arrondis pour un look plus doux */
     color: var(--accent-blue);
     text-decoration: none;
-    letter-spacing: 0.08em;
-    transition: color 0.3s ease;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: 1px solid rgba(74, 144, 226, 0.4);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-left: 20px; /* Ajoute un peu de marge pour le positionnement */
 }
 
 header .logo:hover {
-    color: var(--accent-purple);
+    background: var(--accent-blue);
+    color: var(--dark-bg);
+    box-shadow: 0 0 20px var(--hover-glow);
+    transform: translateY(-3px);
 }
+/* Ajout d'une icône pour le bouton retour si tu veux */
+header .logo::before {
+    font-family: "Font Awesome 6 Free"; /* Assure-toi que Font Awesome est bien chargé */
+    font-weight: 900; /* Pour les icônes solid */
+    content: "\f060"; /* Code de l'icône "arrow-left" */
+}
+
 
 /* Sections de contenu */
 .content-section {
@@ -163,14 +181,18 @@ strong {
 .presentation-entreprise .media,
 .rapport-hebdomadaire .media,
 .bilan .media {
-  flex: 0 0 280px; /* Largeur fixe pour le média, ne grandit pas */
+  flex: 0 0 auto; /* Permet au média de prendre sa taille, mais sans forcer la largeur */
+  max-width: 280px; /* Garde une largeur maximale pour le bloc média */
   order: 2; /* Les médias après le texte par défaut */
   display: flex;
   flex-direction: column;
   gap: 20px;
   align-items: center;
   justify-content: flex-start;
-  padding: 0; /* Supprime le padding du conteneur media */
+  padding: 0;
+  background-color: transparent; /* Assure que le conteneur media n'a pas de fond */
+  border: none; /* Assure que le conteneur media n'a pas de bordure */
+  box-shadow: none; /* Assure que le conteneur media n'a pas d'ombre */
 }
 
 /* Inversion de l'ordre pour les blocs pairs pour une disposition alternée */
@@ -189,15 +211,15 @@ strong {
   width: 100%;
   max-width: 280px;
   height: auto;
-  max-height: 280px; /* Hauteur maximale pour éviter les images trop grandes */
-  object-fit: contain; /* L'image entière est visible, sans être coupée */
-  border-radius: 12px; /* Applique les bords arrondis directement à l'image */
+  max-height: 280px;
+  object-fit: contain;
+  border-radius: 12px;
   display: block;
-  border: none; /* Supprime la bordure du conteneur */
-  box-shadow: 0 5px 15px var(--soft-shadow); /* Ombre douce, pas de néon */
+  border: none; /* Important : assure qu'il n'y a pas de bordure résiduelle */
+  box-shadow: 0 5px 15px var(--soft-shadow); /* Ombre douce directement sur l'image */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  background-color: transparent; /* Rend le fond du conteneur transparent */
-  padding: 0; /* Supprime le padding du conteneur */
+  background-color: transparent; /* Important : pas de fond derrière l'image */
+  padding: 0; /* Important : pas de padding autour de l'image */
 }
 
 .media img:hover {
@@ -206,14 +228,13 @@ strong {
 }
 
 /* Styles pour les lecteurs audio */
-/* Le wrapper audio est maintenant stylisé pour s'intégrer sous le texte */
 .activite .media audio,
 .presentation-entreprise .media audio,
 .rapport-hebdomadaire .media audio,
 .bilan .media audio {
     width: 100%; /* Pleine largeur dans son conteneur média */
     max-width: 280px;
-     /* Espacement avec l'image ou le texte précédent */
+    margin-top: 15px; /* Espacement avec l'image ou le texte précédent */
     border-radius: 8px;
     outline: none;
     box-shadow: 0 2px 10px rgba(0,0,0,0.3);
@@ -236,7 +257,7 @@ strong {
 .rapport-hebdomadaire .media audio::-webkit-media-controls-panel,
 .bilan .media audio::-webkit-media-controls-panel {
     background-color: var(--accent-blue);
-    border-radius: 4px;
+    border-radius: 5px;
     color: var(--light-text);
 }
 
@@ -258,12 +279,12 @@ strong {
 /* Liens pour annexes/bilan */
 .media a,
 .content a {
-  display: inline-flex; /* Utiliser flexbox pour centrer le contenu du bouton */
+  display: inline-flex;
   align-items: center;
-  gap: 8px; /* Espacement entre icône et texte */
+  gap: 8px;
   padding: 10px 20px;
-  background: rgba(74, 144, 226, 0.2); /* Fond semi-transparent */
-  border-radius: 25px; /* Bords très arrondis pour un look plus doux */
+  background: rgba(74, 144, 226, 0.2);
+  border-radius: 25px;
   color: var(--accent-blue);
   text-decoration: none;
   font-size: 0.95rem;
@@ -284,7 +305,7 @@ strong {
 
 /* Icônes pour les liens (Font Awesome) */
 .media a i, .content a i {
-    font-size: 1em;
+    font-size: 1.1em;
 }
 
 /* Liste pour rapport hebdomadaire */
@@ -368,6 +389,7 @@ strong {
         width: 100%; /* Prend toute la largeur */
         flex: 0 0 auto; /* Ajustement automatique */
         margin-top: 25px; /* Plus d'espace entre texte et média */
+        max-width: unset; /* Retire la max-width sur mobile pour que l'image s'étende */
     }
 
     .media img {
