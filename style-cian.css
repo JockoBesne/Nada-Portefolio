@@ -38,8 +38,6 @@ header {
     padding: 15px 0; /* Padding légèrement augmenté pour le bouton */
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    /* Retiré: position: sticky; pour que la barre ne défile plus */
-    /* Retiré: top: 0; */
     z-index: 100;
 }
 
@@ -178,7 +176,7 @@ strong {
 
 /* Bloc média (images, audios) */
 .activite .media,
-.presentation-entreprise .media,
+.presentation-entreprise .media, /* Cible spécifiquement pour le stage */
 .rapport-hebdomadaire .media,
 .bilan .media {
   flex: 0 0 auto; /* Permet au média de prendre sa taille, mais sans forcer la largeur */
@@ -215,11 +213,11 @@ strong {
   object-fit: contain;
   border-radius: 12px;
   display: block;
-  border: none; /* Important : assure qu'il n'y a pas de bordure résiduelle */
+  border: none;
   box-shadow: 0 5px 15px var(--soft-shadow); /* Ombre douce directement sur l'image */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  background-color: transparent; /* Important : pas de fond derrière l'image */
-  padding: 0; /* Important : pas de padding autour de l'image */
+  background-color: transparent; /* Pas de fond derrière l'image */
+  padding: 0;
 }
 
 .media img:hover {
@@ -281,18 +279,19 @@ strong {
 .content a {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
+  gap: 6px; /* Réduction de l'espacement pour les petits boutons */
+  padding: 8px 15px; /* Réduction du padding pour des boutons plus petits */
   background: rgba(74, 144, 226, 0.2);
-  border-radius: 25px;
+  border-radius: 20px; /* Bords légèrement moins arrondis mais toujours doux */
   color: var(--accent-blue);
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.85rem; /* Taille de police légèrement plus petite */
   font-weight: 500;
   border: 1px solid rgba(74, 144, 226, 0.4);
   transition: all 0.3s ease;
   cursor: pointer;
   margin-top: 10px;
+  white-space: nowrap; /* Empêche le texte de passer à la ligne dans le bouton */
 }
 
 .media a:hover,
@@ -305,7 +304,7 @@ strong {
 
 /* Icônes pour les liens (Font Awesome) */
 .media a i, .content a i {
-    font-size: 1.1em;
+    font-size: 1em; /* Taille d'icône légèrement plus petite */
 }
 
 /* Liste pour rapport hebdomadaire */
@@ -334,6 +333,11 @@ strong {
 
 .rapport-hebdomadaire li strong {
     color: var(--light-text);
+}
+
+/* Suppression du point pour la ligne "Annexes" */
+.rapport-hebdomadaire li:has(strong:contains("Annexes"))::before {
+    content: none; /* Supprime le pseudo-élément */
 }
 
 /* Spinner de chargement */
@@ -409,6 +413,13 @@ strong {
     .rapport-hebdomadaire .content h2,
     .bilan .content h2 {
         font-size: 1.5rem;
+    }
+
+    /* Ajustement des boutons sur mobile si nécessaire */
+    .media a, .content a {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        gap: 5px;
     }
 }
 
