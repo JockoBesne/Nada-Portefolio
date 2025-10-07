@@ -174,23 +174,23 @@ strong {
   order: 1; /* Par défaut, le contenu texte apparaît en premier */
 }
 
-/* Bloc média (images, audios) */
+/* Bloc média (images, audios) - Modifié ici */
 .activite .media,
-.presentation-entreprise .media, /* Cible spécifiquement pour le stage */
+.presentation-entreprise .media,
 .rapport-hebdomadaire .media,
 .bilan .media {
-  flex: 0 0 auto; /* Permet au média de prendre sa taille, mais sans forcer la largeur */
-  max-width: 280px; /* Garde une largeur maximale pour le bloc média */
-  order: 2; /* Les médias après le texte par défaut */
+  flex: 0 0 auto;
+  max-width: 280px;
+  order: 2;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Force les éléments à s'empiler verticalement */
   gap: 20px;
   align-items: center;
   justify-content: flex-start;
   padding: 0;
-  background-color: transparent; /* Assure que le conteneur media n'a pas de fond */
-  border: none; /* Assure que le conteneur media n'a pas de bordure */
-  box-shadow: none; /* Assure que le conteneur media n'a pas d'ombre */
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 /* Inversion de l'ordre pour les blocs pairs pour une disposition alternée */
@@ -204,7 +204,7 @@ strong {
     order: 1;
 }
 
-/* Style des images */
+/* Style des images - Appliqué à toutes les images à l'intérieur de .media */
 .media img {
   width: 100%;
   max-width: 280px;
@@ -225,7 +225,7 @@ strong {
     box-shadow: 0 8px 20px rgba(0,0,0,0.6);
 }
 
-/* Styles pour les lecteurs audio */
+/* Styles pour les lecteurs audio - Appliqué à tous les audios à l'intérieur de .media */
 .activite .media audio,
 .presentation-entreprise .media audio,
 .rapport-hebdomadaire .media audio,
@@ -321,7 +321,14 @@ strong {
     color: var(--dark-text);
 }
 
-.rapport-hebdomadaire li::before {
+/* Puces pour Tâches et Compétences */
+.rapport-hebdomadaire li:has(strong:contains("Tâches")),
+.rapport-hebdomadaire li:has(strong:contains("Compétences")) {
+    padding-left: 30px; /* Assure l'espace pour la puce */
+}
+
+.rapport-hebdomadaire li:has(strong:contains("Tâches"))::before,
+.rapport-hebdomadaire li:has(strong:contains("Compétences"))::before {
     content: '\2022'; /* Point simple comme puce */
     position: absolute;
     left: 0;
@@ -331,13 +338,17 @@ strong {
     top: -2px;
 }
 
-.rapport-hebdomadaire li strong {
-    color: var(--light-text);
+/* Suppression du point pour la ligne "Annexes" et alignement */
+.rapport-hebdomadaire li:has(strong:contains("Annexes")) {
+    padding-left: 0; /* Supprime le padding pour aligner "Annexes" */
 }
 
-/* Suppression du point pour la ligne "Annexes" */
 .rapport-hebdomadaire li:has(strong:contains("Annexes"))::before {
     content: none; /* Supprime le pseudo-élément */
+}
+
+.rapport-hebdomadaire li strong {
+    color: var(--light-text);
 }
 
 /* Spinner de chargement */
