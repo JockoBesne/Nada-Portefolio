@@ -11,7 +11,45 @@
 
 /* global box-sizing */
 *, *::before, *::after { box-sizing: border-box; }
+ 
+/* Cachez le contenu principal par défaut */
+main {
+    display: none; /* Cache l'élément principal au chargement */
+    opacity: 0; /* Pour la transition en douceur */
+    transition: opacity 0.5s ease-in-out; /* Pour une transition douce */
+}
 
+/* Styles pour le conteneur du spinner */
+.spinner-container {
+    position: fixed; /* Reste visible même en scrollant */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* Fond semi-transparent */
+    display: flex; /* Pour centrer le contenu */
+    justify-content: center; /* Centrage horizontal */
+    align-items: center; /* Centrage vertical */
+    z-index: 9999; /* Assure que le spinner est au-dessus de tout */
+    transition: opacity 0.5s ease-in-out; /* Pour une transition douce */
+}
+
+/* Masquer le spinner */
+.spinner-container.hidden {
+    opacity: 0;
+    visibility: hidden; /* Cache complètement l'élément une fois masqué */
+    pointer-events: none; /* Empêche les clics sur le spinner masqué */
+}
+
+/* Styles pour l'icône Font Awesome (si utilisée) */
+.spinner-container i {
+    color: #333; /* Couleur de votre choix */
+}
+
+/* 
+   --------------------------------------------------------------------------
+   Le reste de votre fichier style-cian.css existant doit venir APRÈS ces règles.
+   --------------------------------------------------------------------------
 /* base */
 body{
   background-color: var(--dark-bg);
@@ -52,6 +90,7 @@ p, li, h2, .content { overflow-wrap:anywhere; word-break:break-word; }
 
   overflow: hidden; /* avoid visual overflow */
 }
+
 
 /* use :has when available */
 @supports (selector(:has(.media))) {
