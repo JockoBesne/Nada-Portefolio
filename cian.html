@@ -57,11 +57,32 @@
     <p>&copy; <span id="currentYear"></span> Votre Site</p>
   </footer>
 
+
   <script>
     // année courante
     document.getElementById('currentYear').textContent = new Date().getFullYear();
   </script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const sections = document.querySelectorAll('.content-section');
 
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible'); // Optionnel: pour cacher quand on sort de l'écran
+        }
+      });
+    }, {
+      threshold: 0.1 // Déclenche quand 10% de la section est visible
+    });
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  });
+</script> 
   <script>
   /* -------------------------
      Gestion du spinner
