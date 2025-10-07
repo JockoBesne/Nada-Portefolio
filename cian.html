@@ -212,6 +212,13 @@
           return url ? `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />` : '';
         }).join('');
 
+        const audioHtml = (act.fichiersAudio || []).map(a => {
+          const url = a.url;
+          const titre = a.titre || 'Fichier audio';
+          return url ? `<audio controls src="${url}" aria-label="${titre}"></audio>` : '';
+        }).join('');
+
+
         const bilanPdfHtml = stage.bilan_pdf_url ? `<a href="${stage.bilan_pdf_url}" download>Télécharger le bilan en PDF</a>` : '';
 
         const semainesHtml = (stage.semaine || []).map(s => {
@@ -241,7 +248,10 @@
               <p><strong>Description :</strong> ${stage.description || ''}</p>
               ${stage.lien ? `<p><a href="${stage.lien}" target="_blank" rel="noopener">Site web de l'entreprise</a></p>` : ''}
             </div>
-            <div class="media">${photosHtml}</div>
+            <div class="media">
+              ${photosHtml}
+              ${audioHtml}
+              $</div>
           </article>
 
           <article class="rapport-hebdomadaire">
