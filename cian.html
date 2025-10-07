@@ -67,15 +67,28 @@
      ------------------------- */
   const apiBase = 'https://cmspayload-q0ln.onrender.com/api';
 
+  // makeMediaUrl devient obsolète pour les URLs directes de GitHub Pages,
+  // mais on le garde pour l'instant au cas où un type de fichier est mal formaté.
+  // Cependant, les URLs provenant de Payload seront maintenant des URLs complètes.
   function makeMediaUrl(file) {
-    if (!file) return '';
-    const f = (typeof file === 'string') ? { url: file } : file;
-    const candidate = f.url || f.path || f?.data?.url || '';
-    if (!candidate) return '';
-    if (candidate.startsWith('http://') || candidate.startsWith('https://')) return candidate;
-    // Utilisez la partie base de votre API Render, sans le /api
-    const mediaBaseUrl = 'https://cmspayload-q0ln.onrender.com'; // <--- CORRECTION ICI
-    return `${mediaBaseUrl}${candidate.startsWith('/') ? '' : '/'}${candidate}`;
+    // Si 'file' est déjà un objet avec une 'url' complète, l'utiliser directement.
+    // Ou si c'est une string, l'utiliser directement.
+    let url = '';
+    if (typeof file === 'string') {
+        url = file;
+    } else if (file && typeof file.url === 'string') {
+        url = file.url;
+    }
+
+    // Si l'URL commence déjà par http ou https (ce qui sera le cas pour GitHub Pages),
+    // on la retourne telle quelle.
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+        return url;
+    }
+    // Sinon, c'est un cas inattendu ou un chemin relatif qui n'est plus géré ici
+    // puisque nos URLs viendront de GitHub Pages. On peut retourner une chaîne vide ou gérer une erreur.
+    console.warn('URL de média inattendue:', url); // Avertissement si une URL non-HTTP/HTTPS est passée
+    return '';
   }
 
   /* -------------------------
@@ -121,7 +134,8 @@
      ------------------------- */
   async function fetchActivites() {
     try {
-      const response = await fetch(`${apiBase}/activites?depth=1`);
+      // Pas besoin de ?depth=1 si tu n'as plus de relations 'upload' qui sont "peuplées"
+      const response = await fetch(`${apiBase}/activites`);
       if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
       const data = await response.json();
       const activities = data.docs || [];
@@ -136,17 +150,21 @@
       }
 
       activities.forEach(act => {
-        // photos html
+        // NOUVEAU : photos html - act.photos est maintenant un tableau d'objets { url, alt }
         const photosHtml = (act.photos || []).map(p => {
-          const file = (typeof p === 'string') ? { url: p } : p;
-          const url = makeMediaUrl(file);
-          return url ? `<img src="${url}" alt="${(file.alt || "Photo de l'activité").replace(/"/g, '&quot;')}" />` : '';
+          // p est directement l'objet { url: '...', alt: '...' }
+          const url = p.url;
+          const alt = p.alt || "Photo de l'activité";
+          return url ? `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />` : '';
         }).join('');
 
-        // audio html
-        const audioHtml = act.audio ? `<audio controls src="${makeMediaUrl(act.audio)}"></audio>` : '';
+        // NOUVEAU : audio html - act.fichiersAudio est maintenant un tableau d'objets { url, titre }
+        const audioHtml = (act.fichiersAudio || []).map(a => {
+            const url = a.url;
+            const titre = a.titre || 'Fichier audio';
+            return url ? `<audio controls src="${url}" aria-label="${titre}"></audio>` : '';
+        }).join('');
 
-        //const liensHtml = act.liens ? `<p><a href="${act.liens}" target="_blank" rel="noopener">${act.liens}</a></p>` : '';
 
         // construction stable : content + media
         container.innerHTML += `
@@ -180,7 +198,8 @@
      ------------------------- */
   async function fetchStages() {
     try {
-      const response = await fetch(`${apiBase}/stage?depth=1`);
+      // Pas besoin de ?depth=1 si tu n'as plus de relations 'upload' qui sont "peuplées"
+      const response = await fetch(`${apiBase}/stage`);
       if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
       const data = await response.json();
       const stages = data.docs || [];
@@ -195,21 +214,23 @@
       }
 
       stages.forEach(stage => {
-        // photos for stage (if you add photos in Payload)
+        // NOUVEAU : photos for stage - stage.photos est maintenant un tableau d'objets { url, alt }
         const photosHtml = (stage.photos || []).map(p => {
-          const file = (typeof p === 'string') ? { url: p } : p;
-          const url = makeMediaUrl(file);
-          return url ? `<img src="${url}" alt="${(file.alt || 'Photo stage').replace(/"/g, '&quot;')}" />` : '';
+          const url = p.url;
+          const alt = p.alt || 'Photo stage';
+          return url ? `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />` : '';
         }).join('');
 
-        const bilanPdfHtml = stage.bilan_pdf ? `<a href="${makeMediaUrl(stage.bilan_pdf)}" download>Télécharger le bilan en PDF</a>` : '';
+        // NOUVEAU : bilanPdfHtml - stage.bilan_pdf_url est une simple URL texte
+        const bilanPdfHtml = stage.bilan_pdf_url ? `<a href="${stage.bilan_pdf_url}" download>Télécharger le bilan en PDF</a>` : '';
 
-        // build semaines HTML
+
+        // NOUVEAU : build semaines HTML (pour les annexes)
         const semainesHtml = (stage.semaine || []).map(s => {
           const annexesHtml = (s.annexes || []).map(a => {
-            const file = (typeof a === 'string') ? { url: a, filename: a } : a;
-            const url = makeMediaUrl(file);
-            const filename = file.filename || file.name || 'Annexe';
+            // a est maintenant un objet { url: '...', nomFichier: '...' }
+            const url = a.url;
+            const filename = a.nomFichier || 'Annexe';
             return url ? `<a href="${url}" download>${filename}</a>` : '';
           }).join(', ') || 'Aucune annexe';
 
