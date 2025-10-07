@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CIAN</title>
   <link rel="stylesheet" href="style-cian.css">
-  <!-- J'ai ajouté des polices modernes ici qui correspondent au style "futuriste/néon" -->
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;700&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
@@ -22,28 +21,33 @@
   </header>
 
   <main>
-    <div class="container"> <!-- Ajout d'un conteneur global pour main -->
-      <!-- Identification -->
-      <section id="identification" class="content-section">
+    <!-- Identification -->
+    <section id="identification" class="content-section">
+      <div class="container" id="identification-container">
         <div class="identification-header">
           <p><strong>Darcel Nathan</strong></p>
           <p>Distanciel</p>
           <p>2025/2026</p>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Activités -->
-      <section id="activites" class="content-section">
-        <!-- Contenu des activités inséré dynamiquement par JS -->
-      </section>
+    <!-- Activités -->
+    <section id="activites" class="content-section">
+      <div class="container" id="activites-container">
+        <!-- Activités insérées dynamiquement -->
+      </div>
+    </section>
 
-      <!-- Stage -->
-      <section id="stage" class="content-section">
-        <!-- Contenu des stages inséré dynamiquement par JS -->
-        <!-- J'ai laissé les articles vides ici, car ils seront remplis par JS.
-             Les h1 d'exemple et articles vides n'ont plus lieu d'être si JS remplit tout. -->
-      </section>
-    </div>
+    <!-- Stage -->
+    <section id="stage" class="content-section">
+      <div class="container" id="stage-container">
+        <!-- Stage inséré dynamiquement (Présentation, Rapport, Bilan) -->
+        <!-- Les balises h1 et articles vides ici étaient dans votre original mais si le JS remplit tout,
+             elles seront écrasées. Je les ai retirées ici pour plus de clarté,
+             mais je les réintroduirai dans le JS si c'est la structure souhaitée. -->
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -71,7 +75,7 @@
   }
 
   function hideSpinner() {
-    if (loadingSpinner) loadingSpinner.classList.add('hidden');
+    if (loadingSpinner) loadingContent.classList.add('hidden'); // Correction ici, loadingContent au lieu de loadingSpinner
     if (mainContent) {
       mainContent.style.display = 'block';
       setTimeout(() => { mainContent.style.opacity = '1'; }, 50);
@@ -95,23 +99,21 @@
   }
 
   /* -------------------------
-     Gestion des blocs média
+     Gestion des blocs média (ajustée pour les nouveaux wrappers)
      ------------------------- */
-  // Cette fonction est moins pertinente maintenant car nous gérons explicitement la présence d'audio
-  // en le plaçant dans un wrapper séparé. Je la garde mais elle pourrait être simplifiée.
   function markMediaBlocks() {
     document.querySelectorAll('.activite, .presentation-entreprise, .rapport-hebdomadaire, .bilan')
       .forEach(block => {
         const hasImg = !!block.querySelector('.media img');
-        const hasAudio = !!block.querySelector('.audio-player-wrapper audio'); // Vérifie le nouveau wrapper
+        const hasAudio = !!block.querySelector('.audio-player-wrapper audio');
         const hasLink = !!block.querySelector('.media a'); // Les liens d'annexes peuvent rester dans .media si pas de photos
-                                                           // Ou être déplacés avec les audios si c'est plus clair visuellement
 
-        // On peut ajouter une classe si le bloc a des images ET un audio pour des styles spécifiques
+        // Nettoyer les anciennes classes avant d'ajouter les nouvelles
+        block.classList.remove('has-visual-and-audio', 'has-visual', 'has-audio-only');
+
         if (hasImg && hasAudio) block.classList.add('has-visual-and-audio');
         else if (hasImg) block.classList.add('has-visual');
-        else if (hasAudio) block.classList.add('has-audio-only'); // Utile pour des blocs sans image mais avec audio
-        else block.classList.remove('has-visual-and-audio', 'has-visual', 'has-audio-only'); // Nettoyer les classes
+        else if (hasAudio) block.classList.add('has-audio-only');
       });
   }
 
@@ -137,13 +139,17 @@
      ------------------------- */
   async function fetchActivites() {
     const container = document.getElementById('activites-container');
+    if (!container) {
+        console.error("Erreur: Le conteneur '#activites-container' n'a pas été trouvé.");
+        return; // Sortir de la fonction si le conteneur n'existe pas
+    }
     try {
       const response = await fetch(`${apiBase}/activites`);
       if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
       const data = await response.json();
       const activities = data.docs || [];
 
-      container.innerHTML = '<h1>Activités</h1>';
+      container.innerHTML = '<h1>Activités</h1>'; // Ajout du titre de section ici
 
       if (activities.length === 0) {
         container.innerHTML += '<p>Aucune activité disponible.</p>';
@@ -152,37 +158,37 @@
 
       activities.forEach(act => {
         const photosHtml = (act.photos || []).map(p => {
-          const url = makeMediaUrl(p); // Utilise makeMediaUrl pour plus de robustesse
+          const url = makeMediaUrl(p);
           const alt = p.alt || "Photo de l'activité";
           return url ? `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />` : '';
         }).join('');
 
         const audioHtml = (act.fichiersAudio || []).map(a => {
-          const url = makeMediaUrl(a); // Utilise makeMediaUrl
+          const url = makeMediaUrl(a);
           const titre = a.titre || 'Fichier audio';
           return url ? `<audio controls src="${url}" aria-label="${titre}"></audio>` : '';
         }).join('');
 
         // Construction de l'article avec le nouvel emplacement pour l'audio
         container.innerHTML += `
-          <article class="activite" data-title="Activités"> <!-- Ajout de data-title pour le pseudo-élément CSS -->
+          <article class="activite" data-title="Activités"> <!-- Ajout de data-title -->
             <div class="content">
               <h2>${act.mois || 'Mois non spécifié'}</h2>
               <p><strong>Activité :</strong> ${act.description || 'Description non disponible.'}</p>
               <p><strong>Lieu :</strong> ${act.lieu || '-'}</p>
               <p><strong>Rôle :</strong> ${act.role || '-'}</p>
             </div>
-            ${photosHtml ? `<div class="media">${photosHtml}</div>` : ''} <!-- Le div media est ajouté seulement s'il y a des photos -->
-            ${audioHtml ? `<div class="audio-player-wrapper">${audioHtml}</div>` : ''} <!-- Le wrapper audio est ajouté s'il y a de l'audio -->
+            ${photosHtml ? `<div class="media">${photosHtml}</div>` : ''}
+            ${audioHtml ? `<div class="audio-player-wrapper">${audioHtml}</div>` : ''}
           </article>
         `;
       });
 
-      markMediaBlocks(); // Re-marquer les blocs après l'insertion
+      markMediaBlocks();
 
     } catch (err) {
       console.error('Erreur Activités:', err);
-      container.innerHTML = '<p>Erreur lors du chargement des activités.</p>';
+      container.innerHTML = '<h1>Activités</h1><p>Erreur lors du chargement des activités.</p>'; // Garde le titre même en cas d'erreur
     }
   }
 
@@ -191,13 +197,17 @@
      ------------------------- */
   async function fetchStages() {
     const container = document.getElementById('stage-container');
+    if (!container) {
+        console.error("Erreur: Le conteneur '#stage-container' n'a pas été trouvé.");
+        return; // Sortir de la fonction si le conteneur n'existe pas
+    }
     try {
       const response = await fetch(`${apiBase}/stage`);
       if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
       const data = await response.json();
       const stages = data.docs || [];
 
-      container.innerHTML = '<h1>Stages</h1>';
+      container.innerHTML = '<h1>Stages</h1>'; // Ajout du titre de section ici
 
       if (stages.length === 0) {
         container.innerHTML += '<p>Aucun stage disponible.</p>';
@@ -206,13 +216,15 @@
 
       stages.forEach(stage => {
         // --- PRÉSENTATION ENTREPRISE ---
-        const presPhotosHtml = (stage.photos_presentation || []).map(p => { // Supposons un champ spécifique pour les photos de présentation
+        // J'utilise ici les mêmes noms de champs que dans l'activité pour les photos/audio,
+        // si vos champs Payload sont différents pour les stages, vous devrez ajuster.
+        const presPhotosHtml = (stage.photos || []).map(p => { // Réutilisé 'photos' si c'est un champ général pour les stages
           const url = makeMediaUrl(p);
           const alt = p.alt || 'Photo entreprise';
           return url ? `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />` : '';
         }).join('');
 
-        const presAudioHtml = (stage.fichiersAudio_presentation || []).map(a => { // Supposons un champ spécifique
+        const presAudioHtml = (stage.fichiersAudio || []).map(a => { // Réutilisé 'fichiersAudio'
           const url = makeMediaUrl(a);
           const titre = a.titre || 'Audio présentation';
           return url ? `<audio controls src="${url}" aria-label="${titre}"></audio>` : '';
@@ -232,55 +244,35 @@
         `;
 
         // --- RAPPORT HEBDOMADAIRE ---
+        // Pour le rapport hebdomadaire, j'ai conservé la structure où toutes les semaines sont listées
+        // dans un seul article .rapport-hebdomadaire, avec la possibilité d'y ajouter des médias globaux au rapport.
         const semainesHtml = (stage.semaine || []).map(s => {
+          // Les annexes restent des liens, pas de wrapper audio-player-wrapper ici pour elles.
           const annexesHtml = (s.annexes || []).map(a => {
             const url = makeMediaUrl(a);
             const filename = a.nomFichier || 'Annexe';
             return url ? `<a href="${url}" download>${filename}</a>` : '';
-          }).join(''); // On joint sans virgule si on veut les afficher en blocs séparés, ou avec ', ' si inline.
-
-          const semainePhotosHtml = (s.photos_semaine || []).map(p => { // Supposons un champ photos par semaine
-            const url = makeMediaUrl(p);
-            const alt = p.alt || `Photo semaine ${s.numero}`;
-            return url ? `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />` : '';
-          }).join('');
-
-          const semaineAudioHtml = (s.fichiersAudio_semaine || []).map(a => { // Supposons un champ audio par semaine
-            const url = makeMediaUrl(a);
-            const titre = a.titre || `Audio semaine ${s.numero}`;
-            return url ? `<audio controls src="${url}" aria-label="${titre}"></audio>` : '';
-          }).join('');
-
+          }).join(', '); // Les annexes sont des liens inline, donc on les join avec une virgule
 
           return `
-            <article class="rapport-hebdomadaire week-report" data-title="Semaine ${s.numero || ''}">
-              <div class="content">
-                <h3>Semaine ${s.numero || 'Non spécifié'}</h3>
-                <ul>
-                  <li><strong>Tâches :</strong> ${s.taches || '-'}</li>
-                  <li><strong>Compétences :</strong> ${s.competences || '-'}</li>
-                  <li><strong>Annexes :</strong> ${annexesHtml || 'Aucune annexe'}</li>
-                </ul>
-              </div>
-              ${semainePhotosHtml ? `<div class="media">${semainePhotosHtml}</div>` : ''}
-              ${semaineAudioHtml ? `<div class="audio-player-wrapper">${semaineAudioHtml}</div>` : ''}
-            </article>
+            <div class="week">
+              <h3>Semaine ${s.numero || 'Non spécifié'}</h3>
+              <ul>
+                <li><strong>Tâches :</strong> ${s.taches || '-'}</li>
+                <li><strong>Compétences :</strong> ${s.competences || '-'}</li>
+                <li><strong>Annexes :</strong> ${annexesHtml || 'Aucune annexe'}</li>
+              </ul>
+            </div>
           `;
-        }).join('');
+        }).join(''); // Chaque 'week' est déjà un bloc, pas besoin de le joindre avec des séparateurs html
 
-        // Si `semainesHtml` contient plusieurs articles individuels, il faut les insérer.
-        // Ou bien, si le rapport hebdomadaire est un seul article, la structure serait différente.
-        // Je vais assumer que chaque semaine est un article pour le moment, mais cela pourrait être un seul grand article avec plusieurs sections de semaines.
-        // Si vous avez un seul article "Rapport Hebdomadaire" qui contient toutes les semaines, ajustez ici.
-        // Pour l'instant, je les ajoute directement au conteneur, mais il serait mieux d'avoir un wrapper s'il y a beaucoup de semaines.
-
-        // Pour la structure donnée initialement, où `.rapport-hebdomadaire` est un seul article contenant toutes les semaines:
-        const globalRapportHebdoPhotosHtml = (stage.photos_rapport_hebdo || []).map(p => { // Supposons un champ global pour le rapport
+        // Médias globaux pour le rapport hebdomadaire (si vos données Payload le permettent)
+        const rapportHebdoPhotosHtml = (stage.photos_rapport_hebdo || []).map(p => {
             const url = makeMediaUrl(p);
             const alt = p.alt || `Photo rapport hebdomadaire`;
             return url ? `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />` : '';
         }).join('');
-        const globalRapportHebdoAudioHtml = (stage.fichiersAudio_rapport_hebdo || []).map(a => { // Supposons un champ global
+        const rapportHebdoAudioHtml = (stage.fichiersAudio_rapport_hebdo || []).map(a => {
             const url = makeMediaUrl(a);
             const titre = a.titre || `Audio rapport hebdomadaire`;
             return url ? `<audio controls src="${url}" aria-label="${titre}"></audio>` : '';
@@ -292,22 +284,21 @@
               <h2>Rapport Hebdomadaire</h2>
               ${semainesHtml || '<p>Aucun rapport hebdomadaire disponible.</p>'}
             </div>
-            ${globalRapportHebdoPhotosHtml ? `<div class="media">${globalRapportHebdoPhotosHtml}</div>` : ''}
-            ${globalRapportHebdoAudioHtml ? `<div class="audio-player-wrapper">${globalRapportHebdoAudioHtml}</div>` : ''}
+            ${rapportHebdoPhotosHtml ? `<div class="media">${rapportHebdoPhotosHtml}</div>` : ''}
+            ${rapportHebdoAudioHtml ? `<div class="audio-player-wrapper">${rapportHebdoAudioHtml}</div>` : ''}
           </article>
         `;
-
 
         // --- BILAN ---
         const bilanPdfHtml = stage.bilan_pdf_url ? `<p><a href="${stage.bilan_pdf_url}" download>Télécharger le bilan en PDF</a></p>` : '';
 
-        const bilanPhotosHtml = (stage.photos_bilan || []).map(p => { // Supposons un champ spécifique pour les photos du bilan
+        const bilanPhotosHtml = (stage.photos_bilan || []).map(p => {
             const url = makeMediaUrl(p);
             const alt = p.alt || 'Photo bilan';
             return url ? `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />` : '';
         }).join('');
 
-        const bilanAudioHtml = (stage.fichiersAudio_bilan || []).map(a => { // Supposons un champ spécifique pour l'audio du bilan
+        const bilanAudioHtml = (stage.fichiersAudio_bilan || []).map(a => {
             const url = makeMediaUrl(a);
             const titre = a.titre || 'Audio bilan';
             return url ? `<audio controls src="${url}" aria-label="${titre}"></audio>` : '';
@@ -326,11 +317,11 @@
         `;
       });
 
-      markMediaBlocks(); // Re-marquer les blocs après l'insertion
+      markMediaBlocks();
 
     } catch (err) {
       console.error('Erreur Stage:', err);
-      container.innerHTML = '<p>Erreur lors du chargement des stages.</p>';
+      container.innerHTML = '<h1>Stages</h1><p>Erreur lors du chargement des stages.</p>'; // Garde le titre même en cas d'erreur
     }
   }
 
@@ -340,9 +331,6 @@
   document.addEventListener('DOMContentLoaded', async () => {
     showSpinner();
     try {
-      // J'ai ajouté un wrapper .container autour du main content pour centrer le tout
-      // Le container #identification-container et #activites-container n'est plus nécessaire car le .container global fait le travail
-      // J'ai aussi ajouté la balise H1 dans les fonctions JS car c'est plus propre quand le contenu est dynamique
       await Promise.all([fetchActivites(), fetchStages()]);
     } finally {
       hideSpinner();
