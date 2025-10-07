@@ -56,294 +56,220 @@
   <footer>
     <p>&copy; <span id="currentYear"></span> Votre Site</p>
   </footer>
-
   <script>
     // année courante
     document.getElementById('currentYear').textContent = new Date().getFullYear();
+  </script>
 
-    /* -------------------------
-       Helper : gestion du spinner de chargement
-       ------------------------- */
-    const loadingSpinner = document.getElementById('loading-spinner');
-    const mainContent = document.querySelector('main');
+  <script>
+  /* -------------------------
+     Helper : construction URL média (robuste)
+     ------------------------- */
+  const apiBase = 'https://cmspayload-q0ln.onrender.com/api';
 
-    function showSpinner() {
-      if (loadingSpinner) {
-        loadingSpinner.classList.remove('hidden');
+  function makeMediaUrl(file) {
+    if (!file) return '';
+    const f = (typeof file === 'string') ? { url: file } : file;
+    const candidate = f.url || f.path || f?.data?.url || '';
+    if (!candidate) return '';
+    if (candidate.startsWith('http://') || candidate.startsWith('https://')) return candidate;
+    // Utilisez la partie base de votre API Render, sans le /api
+    const mediaBaseUrl = 'https://cmspayload-q0ln.onrender.com'; // <--- CORRECTION ICI
+    return `${mediaBaseUrl}${candidate.startsWith('/') ? '' : '/'}${candidate}`;
+  }
+
+  /* -------------------------
+     markMediaBlocks() :
+     ajoute/retire .has-media aux articles
+     ------------------------- */
+  function markMediaBlocks() {
+    document.querySelectorAll('.activite, .presentation-entreprise, .rapport-hebdomadaire, .bilan')
+      .forEach(block => {
+        const hasImg = !!block.querySelector('.media img');
+        const hasAudio = !!block.querySelector('.media audio');
+        const hasLink = !!block.querySelector('.media a');
+        if (hasImg || hasAudio || hasLink) block.classList.add('has-media');
+        else block.classList.remove('has-media');
+      });
+  }
+
+  // debounce util
+  function debounce(fn, ms = 100) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(()=> fn(...args), ms);
+    };
+  }
+
+  // observe changes in main to update classes when content injected async
+  document.addEventListener('DOMContentLoaded', () => {
+    markMediaBlocks();
+    const main = document.querySelector('main');
+    if (main) {
+      const obs = new MutationObserver(debounce(markMediaBlocks, 80));
+      obs.observe(main, { childList: true, subtree: true });
+    }
+  });
+
+  /* -------------------------
+     Rendu activites (on génère une structure stable :
+     <article class="activite">
+       <div class="content"> ... texte ... </div>
+       <div class="media"> ... img / audio ...</div>
+     </article>
+     ------------------------- */
+  async function fetchActivites() {
+    try {
+      const response = await fetch(`${apiBase}/activites?depth=1`);
+      if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+      const data = await response.json();
+      const activities = data.docs || [];
+
+      const container = document.getElementById('activites-container');
+      container.innerHTML = '<h1>Activités</h1>';
+
+      if (activities.length === 0) {
+        container.innerHTML += '<p>Aucune activité n\'est disponible pour le moment.</p>';
+        markMediaBlocks();
+        return;
       }
-      // Cache le contenu principal au moment où le spinner est affiché
-      if (mainContent) {
-          mainContent.style.opacity = '0';
-          mainContent.style.display = 'none'; // Cache complètement l'élément
-      }
-    }
 
-    function hideSpinner() {
-      if (loadingSpinner) {
-        loadingSpinner.classList.add('hidden');
-      }
-      // Affiche le contenu principal après que le spinner soit masqué
-      if (mainContent) {
-          mainContent.style.display = 'block'; // Rends l'élément visible
-          setTimeout(() => { // Petite pause pour la transition CSS
-              mainContent.style.opacity = '1'; // Fait apparaître doucement
-          }, 50); // Ajustez cette valeur si la transition est trop rapide/lente
-      }
-    }
+      activities.forEach(act => {
+        // photos html
+        const photosHtml = (act.photos || []).map(p => {
+          const file = (typeof p === 'string') ? { url: p } : p;
+          const url = makeMediaUrl(file);
+          return url ? `<img src="${url}" alt="${(file.alt || "Photo de l'activité").replace(/"/g, '&quot;')}" />` : '';
+        }).join('');
 
-    /* -------------------------
-       Helper : construction URL média (robuste)
-       ------------------------- */
-    const apiBase = 'https://cmspayload-q0ln.onrender.com/api'; // Correct
-    const mediaBaseUrl = 'https://cmspayload-q0ln.onrender.com'; // Pour les médias, sans /api - Correct
+        // audio html
+        const audioHtml = act.audio ? `<audio controls src="${makeMediaUrl(act.audio)}"></audio>` : '';
 
-    function makeMediaUrl(file) {
-      if (!file) return '';
-      const f = (typeof file === 'string') ? { url: file } : file;
-      const candidate = f.url || f.path || f?.data?.url || '';
-      if (!candidate) return '';
-      if (candidate.startsWith('http://') || candidate.startsWith('https://')) return candidate;
-      return `${mediaBaseUrl}${candidate.startsWith('/') ? '' : '/'}${candidate}`;
-    }
+        //const liensHtml = act.liens ? `<p><a href="${act.liens}" target="_blank" rel="noopener">${act.liens}</a></p>` : '';
 
-    /* -------------------------
-       markMediaBlocks() :
-       ajoute/retire .has-media aux articles
-       ------------------------- */
-    function markMediaBlocks() {
-      document.querySelectorAll('.activite, .presentation-entreprise, .rapport-hebdomadaire, .bilan')
-        .forEach(block => {
-          const hasImg = !!block.querySelector('.media img');
-          const hasAudio = !!block.querySelector('.media audio');
-          const hasLink = !!block.querySelector('.media a');
-          if (hasImg || hasAudio || hasLink) block.classList.add('has-media');
-          else block.classList.remove('has-media');
-        });
-    }
+        // construction stable : content + media
+        container.innerHTML += `
+          <article class="activite">
+            <div class="content">
+              <h2>${act.mois || ''}</h2>
+              <p><strong>Activité :</strong> ${act.description || ''}</p>
+              <p><strong>Lieu :</strong> ${act.lieu || '-'}</p>
+              <p><strong>Rôle :</strong> ${act.role || '-'}</p>
+            </div>
+            <div class="media">
+              ${photosHtml}
+              ${audioHtml}
+              
+            </div>
+          </article>
+        `;
+      });
 
-    // debounce util
-    function debounce(fn, ms = 100) {
-      let t;
-      return (...args) => {
-        clearTimeout(t);
-        t = setTimeout(()=> fn(...args), ms);
-      };
-    }
-
-    // observe changes in main to update classes when content injected async
-    document.addEventListener('DOMContentLoaded', () => {
-      // Cette partie sera gérée par le spinner, mais l'observer reste utile
+      // important : après injection on marque les blocs
       markMediaBlocks();
-      const main = document.querySelector('main');
-      if (main) {
-        const obs = new MutationObserver(debounce(markMediaBlocks, 80));
-        obs.observe(main, { childList: true, subtree: true });
-      }
-    });
 
-    /* -------------------------
-       Rendu activites (on génère une structure stable :
-       <article class="activite">
-         <div class="content"> ... texte ... </div>
-         <div class="media"> ... img / audio ...</div>
-       </article>
-       ------------------------- */
-    async function fetchActivites() {
-      try {
-        const response = await fetch(`${apiBase}/activites?depth=1`);
-        if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-        const data = await response.json();
-        const activities = data.docs || [];
-
-        const container = document.getElementById('activites-container');
-        container.innerHTML = '<h1>Activités</h1>';
-
-        if (activities.length === 0) {
-          container.innerHTML += '<p>Aucune activité n\'est disponible pour le moment.</p>';
-          markMediaBlocks();
-          return;
-        }
-
-        activities.forEach(act => {
-          // Gérer le richText de la description
-          // Si votre API Payload renvoie un champ `descriptionHtml` (après conversion côté serveur)
-          // utilisez-le. Sinon, si c'est encore l'objet Lexical JSON, vous devrez le traiter.
-          // Pour l'instant, on suppose que Payload renverra un champ texte simple ou un `descriptionHtml`.
-          const descriptionContent = (act.description && typeof act.description === 'string')
-              ? act.description
-              : (act.descriptionHtml || '<p>Contenu de l\'activité non disponible ou format inattendu.</p>');
-
-          // photos html - Gestion des différents types de médias
-          const photosHtml = (act.photos || []).map(p => {
-            const file = (typeof p === 'string') ? { url: p } : p;
-            const url = makeMediaUrl(file);
-            const mimeType = file.mimeType || (url.match(/\.([0-9a-z]+)(?:[\?#]|$)/i) ? `image/${url.match(/\.([0-9a-z]+)(?:[\?#]|$)/i)[1]}` : '');
-
-            if (!url) return '';
-            if (mimeType.startsWith('image/')) {
-              return `<img src="${url}" alt="${(file.alt || "Photo de l'activité").replace(/"/g, '&quot;')}" />`;
-            } else if (mimeType.startsWith('audio/')) {
-              return `<audio controls src="${url}"></audio>`;
-            } else if (mimeType === 'application/pdf') {
-              return `<p><a href="${url}" target="_blank" rel="noopener">Voir le PDF</a></p>`;
-            } else {
-              return `<p><a href="${url}" target="_blank" rel="noopener">Télécharger le fichier</a></p>`;
-            }
-          }).join('');
-
-          // audio html (spécifique pour le champ 'audio')
-          // Ici aussi, vérifiez le mimeType si act.audio peut être autre chose qu'un fichier audio
-          const audioHtml = act.audio ? `<audio controls src="${makeMediaUrl(act.audio)}"></audio>` : '';
-
-          //const liensHtml = act.liens ? `<p><a href="${act.liens}" target="_blank" rel="noopener">${act.liens}</a></p>` : '';
-
-          // construction stable : content + media
-          container.innerHTML += `
-            <article class="activite">
-              <div class="content">
-                <h2>${act.mois || ''}</h2>
-                <p><strong>Activité :</strong> ${descriptionContent}</p>
-                <p><strong>Lieu :</strong> ${act.lieu || '-'}</p>
-                <p><strong>Rôle :</strong> ${act.role || '-'}</p>
-              </div>
-              <div class="media">
-                ${photosHtml}
-                ${audioHtml}
-              </div>
-            </article>
-          `;
-        });
-
-        markMediaBlocks();
-
-      } catch (err) {
-        console.error('Erreur Activités:', err);
-        document.getElementById('activites-container').innerHTML = '<p>Erreur lors du chargement des activités.</p>';
-      }
+    } catch (err) {
+      console.error('Erreur Activités:', err);
+      document.getElementById('activites-container').innerHTML = '<p>Erreur lors du chargement des activités.</p>';
     }
+  }
 
-    /* -------------------------
-       Rendu stages (même pattern : content + media)
-       ------------------------- */
-    async function fetchStages() {
-      try {
-        const response = await fetch(`${apiBase}/stage?depth=1`);
-        if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-        const data = await response.json();
-        const stages = data.docs || [];
+  /* -------------------------
+     Rendu stages (même pattern : content + media)
+     ------------------------- */
+  async function fetchStages() {
+    try {
+      const response = await fetch(`${apiBase}/stage?depth=1`);
+      if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+      const data = await response.json();
+      const stages = data.docs || [];
 
-        const container = document.getElementById('stage-container');
-        container.innerHTML = '<h1>Stages</h1>';
+      const container = document.getElementById('stage-container');
+      container.innerHTML = '<h1>Stages</h1>';
 
-        if (stages.length === 0) {
-          container.innerHTML += '<p>Aucun stage n\'est disponible pour le moment.</p>';
-          markMediaBlocks();
-          return;
-        }
-
-        stages.forEach(stage => {
-          // Gérer le richText de la description de l'entreprise si elle devient richText
-          const entrepriseDescriptionContent = (stage.description && typeof stage.description === 'string')
-              ? stage.description
-              : (stage.descriptionHtml || '<p>Description de l\'entreprise non disponible ou format inattendu.</p>');
-
-          // photos for stage (if you add photos in Payload) - Gestion des différents types de médias
-          const photosHtml = (stage.photos || []).map(p => {
-            const file = (typeof p === 'string') ? { url: p } : p;
-            const url = makeMediaUrl(file);
-            const mimeType = file.mimeType || (url.match(/\.([0-9a-z]+)(?:[\?#]|$)/i) ? `image/${url.match(/\.([0-9a-z]+)(?:[\?#]|$)/i)[1]}` : '');
-
-            if (!url) return '';
-            if (mimeType.startsWith('image/')) {
-              return `<img src="${url}" alt="${(file.alt || 'Photo stage').replace(/"/g, '&quot;')}" />`;
-            } else if (mimeType.startsWith('audio/')) {
-              return `<audio controls src="${url}"></audio>`;
-            } else if (mimeType === 'application/pdf') {
-              return `<p><a href="${url}" target="_blank" rel="noopener">Voir le PDF</a></p>`;
-            } else {
-              return `<p><a href="${url}" target="_blank" rel="noopener">Télécharger le fichier</a></p>`;
-            }
-          }).join('');
-
-          const bilanPdfHtml = stage.bilan_pdf ? `<a href="${makeMediaUrl(stage.bilan_pdf)}" download>Télécharger le bilan en PDF</a>` : '';
-
-          // build semaines HTML
-          const semainesHtml = (stage.semaine || []).map(s => {
-            const annexesHtml = (s.annexes || []).map(a => {
-              const file = (typeof a === 'string') ? { url: a, filename: a } : a;
-              const url = makeMediaUrl(file);
-              const filename = file.filename || file.name || 'Annexe';
-              return url ? `<a href="${url}" download>${filename}</a>` : '';
-            }).join(', ') || 'Aucune annexe';
-
-            return `
-              <div class="week">
-                <h3>Semaine ${s.numero || ''}</h3>
-                <ul>
-                  <li><strong>Tâches :</strong> ${s.taches || '-'}</li>
-                  <li><strong>Compétences :</strong> ${s.competences || '-'}</li>
-                  <li><strong>Annexes :</strong> ${annexesHtml}</li>
-                </ul>
-              </div>
-            `;
-          }).join('');
-
-          container.innerHTML += `
-            <article class="presentation-entreprise">
-              <div class="content">
-                <h2>Présentation de l'entreprise</h2>
-                <p><strong>Nom :</strong> ${stage.nom_entreprise || ''}</p>
-                <p><strong>Description :</strong> ${entrepriseDescriptionContent}</p>
-                ${stage.lien ? `<p><a href="${stage.lien}" target="_blank" rel="noopener">Site web de l'entreprise</a></p>` : ''}
-              </div>
-              <div class="media">
-                ${photosHtml}
-              </div>
-            </article>
-
-            <article class="rapport-hebdomadaire">
-              <div class="content">
-                <h2>Rapport Hebdomadaire</h2>
-                ${semainesHtml || '<p>Aucun rapport hebdomadaire disponible.</p>'}
-              </div>
-              <div class="media"></div>
-            </article>
-
-            <article class="bilan">
-              <div class="content">
-                <h2>Bilan</h2>
-                <p>${stage.bilan || 'Pas de bilan disponible.'}</p>
-                ${bilanPdfHtml}
-              </div>
-              <div class="media"></div>
-            </article>
-          `;
-        });
-
+      if (stages.length === 0) {
+        container.innerHTML += '<p>Aucun stage n\'est disponible pour le moment.</p>';
         markMediaBlocks();
-
-      } catch (err) {
-        console.error('Erreur Stage:', err);
-        document.getElementById('stage-container').innerHTML = '<p>Erreur lors du chargement des stages.</p>';
+        return;
       }
+
+      stages.forEach(stage => {
+        // photos for stage (if you add photos in Payload)
+        const photosHtml = (stage.photos || []).map(p => {
+          const file = (typeof p === 'string') ? { url: p } : p;
+          const url = makeMediaUrl(file);
+          return url ? `<img src="${url}" alt="${(file.alt || 'Photo stage').replace(/"/g, '&quot;')}" />` : '';
+        }).join('');
+
+        const bilanPdfHtml = stage.bilan_pdf ? `<a href="${makeMediaUrl(stage.bilan_pdf)}" download>Télécharger le bilan en PDF</a>` : '';
+
+        // build semaines HTML
+        const semainesHtml = (stage.semaine || []).map(s => {
+          const annexesHtml = (s.annexes || []).map(a => {
+            const file = (typeof a === 'string') ? { url: a, filename: a } : a;
+            const url = makeMediaUrl(file);
+            const filename = file.filename || file.name || 'Annexe';
+            return url ? `<a href="${url}" download>${filename}</a>` : '';
+          }).join(', ') || 'Aucune annexe';
+
+          return `
+            <div class="week">
+              <h3>Semaine ${s.numero || ''}</h3>
+              <ul>
+                <li><strong>Tâches :</strong> ${s.taches || '-'}</li>
+                <li><strong>Compétences :</strong> ${s.competences || '-'}</li>
+                <li><strong>Annexes :</strong> ${annexesHtml}</li>
+              </ul>
+            </div>
+          `;
+        }).join('');
+
+        container.innerHTML += `
+          <article class="presentation-entreprise">
+            <div class="content">
+              <h2>Présentation de l'entreprise</h2>
+              <p><strong>Nom :</strong> ${stage.nom_entreprise || ''}</p>
+              <p><strong>Description :</strong> ${stage.description || ''}</p>
+              ${stage.lien ? `<p><a href="${stage.lien}" target="_blank" rel="noopener">Site web de l'entreprise</a></p>` : ''}
+            </div>
+            <div class="media">
+              ${photosHtml}
+            </div>
+          </article>
+
+          <article class="rapport-hebdomadaire">
+            <div class="content">
+              <h2>Rapport Hebdomadaire</h2>
+              ${semainesHtml || '<p>Aucun rapport hebdomadaire disponible.</p>'}
+            </div>
+            <div class="media"></div>
+          </article>
+
+          <article class="bilan">
+            <div class="content">
+              <h2>Bilan</h2>
+              <p>${stage.bilan || 'Pas de bilan disponible.'}</p>
+              ${bilanPdfHtml}
+            </div>
+            <div class="media"></div>
+          </article>
+        `;
+      });
+
+      markMediaBlocks();
+
+    } catch (err) {
+      console.error('Erreur Stage:', err);
+      document.getElementById('stage-container').innerHTML = '<p>Erreur lors du chargement des stages.</p>';
     }
+  }
 
-    // Lancer au chargement
-    document.addEventListener('DOMContentLoaded', async () => {
-      showSpinner(); // Affiche le spinner au démarrage
-      try {
-          await Promise.all([ // Attend que les deux fetches soient terminés
-              fetchActivites(),
-              fetchStages()
-          ]);
-      } catch (error) {
-          console.error("Erreur générale lors du chargement des données :", error);
-          // Vous pouvez afficher un message d'erreur global si nécessaire
-          document.querySelector('main').innerHTML = '<p style="text-align: center; color: red;">Une erreur est survenue lors du chargement du contenu.</p>';
-      } finally {
-          hideSpinner(); // Masque le spinner une fois tout terminé (succès ou échec)
-      }
-    });
+  // Lancer au chargement
+  document.addEventListener('DOMContentLoaded', () => {
+    fetchActivites();
+    fetchStages();
+  });
   </script>
 </body>
 </html>
