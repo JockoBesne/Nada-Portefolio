@@ -1,21 +1,60 @@
+/* --- Variables CSS pour la personnalisation --- */
+:root {
+  --dark-bg: #1a1a2e; /* Fond principal plus sombre */
+  --dark-secondary-bg: #0f0f1d; /* Fond secondaire/des titres de bloc */
+  --glass-bg: rgba(25, 25, 40, 0.7); /* Fond des blocs "verre dépoli" */
+  --neon-blue: #00bfff; /* Bleu néon vif */
+  --neon-blue-transparent-medium: rgba(0, 191, 255, 0.3); /* Bleu néon transparent */
+  --neon-blue-transparent-light: rgba(0, 191, 255, 0.1);
+  --light-text: #e0e0e0; /* Texte clair */
+  --dark-text: #a0a0a0; /* Texte secondaire plus sombre */
+  --accent-color: #ff6ec7; /* Une couleur accent flashy pour les détails */
+}
+
 /* --- Global tweaks --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Une police plus moderne */
+    background-color: var(--dark-bg);
+    color: var(--light-text);
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+    overflow-x: hidden; /* Empêche le défilement horizontal */
+}
+
+/* Conteneur principal pour centrer le contenu */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
 .activite,
 .presentation-entreprise,
 .rapport-hebdomadaire,
 .bilan {
   display: grid;
-  grid-template-columns: 1fr 220px;
-  gap: 20px;
+  grid-template-columns: 1fr 220px; /* Conservez cette structure pour le moment */
+  gap: 30px; /* Augmenter l'espacement pour la clarté */
   align-items: start;
-  margin-bottom: 40px;
+  margin-bottom: 50px; /* Plus d'espace entre les blocs */
 
-  padding: 20px;
+  padding: 30px; /* Augmenter le padding interne */
   background: var(--glass-bg);
-  border-radius: 12px;
+  border-radius: 16px; /* Bords plus arrondis */
   border: 1px solid var(--neon-blue-transparent-medium);
-  box-shadow: 0 4px 30px rgba(0,0,0,0.25); /* un peu plus visible */
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4), 0 0 20px var(--neon-blue-transparent-light); /* Ombre plus prononcée avec glow */
   overflow: hidden;
   position: relative;
+  transition: all 0.3s ease-in-out; /* Animation douce au survol */
+}
+
+.activite:hover,
+.presentation-entreprise:hover,
+.rapport-hebdomadaire:hover,
+.bilan:hover {
+    transform: translateY(-5px); /* Léger soulèvement au survol */
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 30px var(--neon-blue); /* Glow plus intense */
 }
 
 /* Ajout d’un “titre de bloc” pour identifier chaque section (activite/stage) */
@@ -25,15 +64,17 @@
 .bilan::before {
   content: attr(data-title);
   position: absolute;
-  top: -12px;
-  left: 20px;
-  font-size: 1rem;
-  font-weight: bold;
+  top: -15px; /* Déplacer un peu plus haut */
+  left: 25px; /* Adapter la position */
+  font-size: 1.1rem; /* Taille légèrement plus grande */
+  font-weight: 600; /* Plus de gras */
   color: var(--neon-blue);
-  text-shadow: 0 0 3px var(--neon-blue);
+  text-shadow: 0 0 8px var(--neon-blue), 0 0 15px rgba(0,191,255,0.7); /* Effet néon plus fort */
   background: var(--dark-secondary-bg);
-  padding: 2px 8px;
-  border-radius: 6px;
+  padding: 4px 12px; /* Plus de padding */
+  border-radius: 8px; /* Bords arrondis */
+  border: 1px solid var(--neon-blue-transparent-medium);
+  z-index: 1; /* S'assurer qu'il est au-dessus */
 }
 
 /* Text toujours à gauche */
@@ -42,10 +83,11 @@
 .rapport-hebdomadaire .content,
 .bilan .content {
   text-align: left;
-  line-height: 1.5;
+  line-height: 1.7; /* Espacement de ligne amélioré */
+  color: var(--light-text);
 }
 
-/* Media à droite, aligné top */
+/* Media (images) à droite, aligné top */
 .activite > .media,
 .presentation-entreprise > .media,
 .rapport-hebdomadaire > .media,
@@ -55,7 +97,7 @@
   justify-self: end;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 15px; /* Espacement accru */
   justify-content: flex-start;
   align-items: center;
   padding: 0;
@@ -64,37 +106,77 @@
 /* Images style */
 .media img {
   width: 100%;
-  max-width: 220px;
-  max-height: 220px;
+  max-width: 250px; /* Un peu plus grand si l'espace le permet */
+  max-height: 250px;
   height: auto;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px; /* Plus arrondis */
   display: block;
-  border: 1px solid var(--neon-blue-transparent-medium);
-  box-shadow: 0 2px 10px rgba(0,191,255,0.2);
+  border: 2px solid var(--neon-blue); /* Bordure plus visible */
+  box-shadow: 0 4px 15px rgba(0,191,255,0.4), 0 0 10px var(--neon-blue-transparent-medium); /* Ombre et glow */
+  transition: transform 0.3s ease; /* Animation au survol */
 }
 
-/* Audio en bas, pleine largeur du bloc texte */
-.media audio {
-  width: 100%;
-  margin-top: 12px;
-  border-radius: 6px;
-  outline: 1px solid var(--neon-blue-transparent-medium);
+.media img:hover {
+    transform: scale(1.03); /* Agrandir légèrement au survol */
 }
+
+/* Audio en bas, pleine largeur du bloc texte (nouvel emplacement) */
+/* Nous allons modifier la structure pour cela, donc cette règle sera remplacée ou ajustée */
+.audio-player-wrapper { /* Nouveau wrapper pour le lecteur audio */
+    grid-column: 1 / -1; /* Prend toute la largeur */
+    margin-top: 20px; /* Espace au-dessus */
+    padding-top: 15px;
+    border-top: 1px dashed var(--neon-blue-transparent-medium); /* Séparateur visuel */
+    display: flex;
+    justify-content: center; /* Centrer le lecteur */
+}
+
+.audio-player-wrapper audio {
+    width: 80%; /* Largeur relative pour le lecteur */
+    max-width: 600px; /* Largeur maximale */
+    border-radius: 8px;
+    outline: none; /* Supprime l'outline par défaut */
+    box-shadow: 0 2px 10px rgba(0,191,255,0.3), 0 0 10px var(--neon-blue-transparent-medium);
+    transition: all 0.3s ease;
+    background-color: var(--dark-secondary-bg); /* Un fond pour le lecteur */
+}
+
+.audio-player-wrapper audio::-webkit-media-controls-panel {
+    background-color: var(--neon-blue-transparent-medium);
+    border-radius: 8px;
+    color: var(--light-text);
+}
+
+.audio-player-wrapper audio::-webkit-media-controls-play-button,
+.audio-player-wrapper audio::-webkit-media-controls-current-time-display,
+.audio-player-wrapper audio::-webkit-media-controls-time-remaining-display {
+    color: var(--light-text);
+}
+
 
 /* Annexes / liens */
-.media a {
+.media a,
+.content a { /* Appliquer aussi aux liens dans le contenu */
   display: inline-block;
-  padding: 6px 10px;
-  background: rgba(0,191,255,0.1);
-  border-radius: 6px;
-  color: var(--light-text);
+  padding: 8px 15px; /* Plus de padding */
+  background: var(--neon-blue-transparent-light);
+  border-radius: 8px;
+  color: var(--neon-blue); /* Couleur néon pour les liens */
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: 1px solid var(--neon-blue-transparent-medium);
+  transition: all 0.3s ease; /* Animation douce */
+  cursor: pointer; /* Indiquer que c'est cliquable */
 }
 
-.media a:hover {
+.media a:hover,
+.content a:hover {
   background: var(--neon-blue-transparent-medium);
+  color: var(--light-text);
+  box-shadow: 0 0 15px var(--neon-blue); /* Glow au survol */
+  transform: translateY(-2px); /* Léger soulèvement */
 }
 
 /* Titles & paragraphs */
@@ -102,42 +184,142 @@
 .presentation-entreprise h2,
 .rapport-hebdomadaire h2,
 .bilan h2 {
-  font-size: 1.6rem;
-  margin-bottom: 12px;
+  font-size: 1.8rem; /* Titres plus grands */
+  margin-bottom: 15px;
   color: var(--neon-blue);
-  text-shadow: 0 0 4px var(--neon-blue);
+  text-shadow: 0 0 8px var(--neon-blue), 0 0 15px rgba(0,191,255,0.6); /* Effet néon plus prononcé */
+  letter-spacing: 0.05em; /* Espacement des lettres */
+}
+
+/* Texte général */
+p {
+    margin-bottom: 1em;
+}
+
+/* Liste pour rapport hebdomadaire */
+.rapport-hebdomadaire ul {
+    list-style: none; /* Supprimer les puces par défaut */
+    padding-left: 0;
+}
+
+.rapport-hebdomadaire li {
+    position: relative;
+    padding-left: 25px; /* Espace pour le marqueur personnalisé */
+    margin-bottom: 8px;
+}
+
+.rapport-hebdomadaire li::before {
+    content: '⚡'; /* Marqueur personnalisé */
+    position: absolute;
+    left: 0;
+    color: var(--accent-color); /* Couleur accent */
+    font-size: 1.1em;
+    line-height: 1;
 }
 
 /* Responsive */
-@media (max-width: 720px) {
-  .activite,
-  .presentation-entreprise,
-  .rapport-hebdomadaire,
-  .bilan {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 960px) { /* breakpoint légèrement modifié */
+    .activite,
+    .presentation-entreprise,
+    .rapport-hebdomadaire,
+    .bilan {
+        grid-template-columns: 1fr; /* Les images passent sous le texte */
+        gap: 20px;
+    }
 
-  .activite > .media,
-  .presentation-entreprise > .media,
-  .rapport-hebdomadaire > .media,
-  .bilan > .media {
-    grid-column: 1;
-    grid-row: auto;
-    align-items: center;
-    justify-content: center;
-  }
+    .activite > .media,
+    .presentation-entreprise > .media,
+    .rapport-hebdomadaire > .media,
+    .bilan > .media {
+        grid-column: 1;
+        grid-row: auto; /* Permet au media de se positionner naturellement */
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px; /* Espace après le texte */
+    }
 
-  .media img {
-    max-width: 90%;
-    max-height: 240px;
-  }
+    .media img {
+        max-width: 80%; /* Plus petit sur mobile */
+        max-height: 200px;
+    }
+
+    .audio-player-wrapper {
+        width: 100%; /* S'adapter sur mobile */
+    }
+
+    .audio-player-wrapper audio {
+        width: 95%; /* Ajuster la largeur du lecteur */
+    }
+
+    .activite::before,
+    .presentation-entreprise::before,
+    .rapport-hebdomadaire::before,
+    .bilan::before {
+        font-size: 1rem;
+        top: -10px;
+        left: 15px;
+    }
+
+    .activite h2,
+    .presentation-entreprise h2,
+    .rapport-hebdomadaire h2,
+    .bilan h2 {
+        font-size: 1.5rem;
+    }
 }
 
 /* Footer */
 footer {
   text-align: center;
-  padding: 20px 0;
-  background-color: var(--dark-bg);
+  padding: 30px 0;
+  background-color: var(--dark-secondary-bg); /* Footer plus distinct */
   border-top: 1px solid var(--neon-blue-transparent-medium);
   font-size: 0.9rem;
+  color: var(--dark-text); /* Texte du footer un peu plus discret */
+  margin-top: 60px; /* Plus d'espace au-dessus */
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+}
+
+/* Animations de fond subtiles */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top left, rgba(0,191,255,0.1) 0%, transparent 25%),
+                radial-gradient(circle at bottom right, rgba(255,100,200,0.1) 0%, transparent 25%);
+    z-index: -1;
+    animation: background-glow 15s infinite alternate ease-in-out;
+}
+
+@keyframes background-glow {
+    0% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+}
+
+/* Personnalisation de la scrollbar (Webkit) */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-secondary-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--neon-blue);
+    border-radius: 5px;
+    border: 2px solid var(--dark-secondary-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
 }
