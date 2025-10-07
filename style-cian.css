@@ -213,7 +213,7 @@ strong {
 .bilan .media audio {
     width: 100%; /* Pleine largeur dans son conteneur média */
     max-width: 280px;
-    margin-top: 15px; /* Espacement avec l'image ou le texte précédent */
+     /* Espacement avec l'image ou le texte précédent */
     border-radius: 8px;
     outline: none;
     box-shadow: 0 2px 10px rgba(0,0,0,0.3);
@@ -236,7 +236,7 @@ strong {
 .rapport-hebdomadaire .media audio::-webkit-media-controls-panel,
 .bilan .media audio::-webkit-media-controls-panel {
     background-color: var(--accent-blue);
-    border-radius: 5px;
+    border-radius: 4px;
     color: var(--light-text);
 }
 
@@ -284,7 +284,7 @@ strong {
 
 /* Icônes pour les liens (Font Awesome) */
 .media a i, .content a i {
-    font-size: 1.1em;
+    font-size: 1em;
 }
 
 /* Liste pour rapport hebdomadaire */
