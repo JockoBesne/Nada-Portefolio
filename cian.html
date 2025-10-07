@@ -212,7 +212,7 @@
           return url ? `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />` : '';
         }).join('');
 
-        const audioHtml = (act.fichiersAudio || []).map(a => {
+        const audioHtml = (stage.fichiersAudio || []).map(a => {
           const url = a.url;
           const titre = a.titre || 'Fichier audio';
           return url ? `<audio controls src="${url}" aria-label="${titre}"></audio>` : '';
