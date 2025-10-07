@@ -11,7 +11,7 @@
 <body>
   <!-- Spinner de chargement -->
   <div id="loading-spinner" class="spinner-container">
-      <i class="fas fa-spinner fa-spin fa-3x"></i>
+    <i class="fas fa-spinner fa-spin fa-3x"></i>
   </div>
 
   <header>
@@ -56,73 +56,53 @@
   <footer>
     <p>&copy; <span id="currentYear"></span> Votre Site</p>
   </footer>
+
   <script>
     // année courante
     document.getElementById('currentYear').textContent = new Date().getFullYear();
   </script>
 
   <script>
-     /* -------------------------
-       Helper : gestion du spinner de chargement
-       ------------------------- */
-    const loadingSpinner = document.getElementById('loading-spinner');
-    const mainContent = document.querySelector('main');
-
-    function showSpinner() {
-      if (loadingSpinner) {
-        loadingSpinner.classList.remove('hidden');
-      }
-      // Cache le contenu principal au moment où le spinner est affiché
-      if (mainContent) {
-          mainContent.style.opacity = '0';
-          mainContent.style.display = 'none'; // Cache complètement l'élément
-      }
-    }
-
-    function hideSpinner() {
-      if (loadingSpinner) {
-        loadingSpinner.classList.add('hidden');
-      }
-      // Affiche le contenu principal après que le spinner soit masqué
-      if (mainContent) {
-          mainContent.style.display = 'block'; // Rends l'élément visible
-          setTimeout(() => { // Petite pause pour la transition CSS
-              mainContent.style.opacity = '1'; // Fait apparaître doucement
-          }, 50); // Ajustez cette valeur si la transition est trop rapide/lente
-      }
-    }
   /* -------------------------
-     Helper : construction URL média (robuste)
+     Gestion du spinner
+     ------------------------- */
+  const loadingSpinner = document.getElementById('loading-spinner');
+  const mainContent = document.querySelector('main');
+
+  function showSpinner() {
+    if (loadingSpinner) loadingSpinner.classList.remove('hidden');
+    if (mainContent) {
+      mainContent.style.opacity = '0';
+      mainContent.style.display = 'none';
+    }
+  }
+
+  function hideSpinner() {
+    if (loadingSpinner) loadingSpinner.classList.add('hidden');
+    if (mainContent) {
+      mainContent.style.display = 'block';
+      setTimeout(() => { mainContent.style.opacity = '1'; }, 50);
+    }
+  }
+
+  /* -------------------------
+     Helper : construction URL média
      ------------------------- */
   const apiBase = 'https://cmspayload-q0ln.onrender.com/api';
 
-  // makeMediaUrl devient obsolète pour les URLs directes de GitHub Pages,
-  // mais on le garde pour l'instant au cas où un type de fichier est mal formaté.
-  // Cependant, les URLs provenant de Payload seront maintenant des URLs complètes.
   function makeMediaUrl(file) {
-    // Si 'file' est déjà un objet avec une 'url' complète, l'utiliser directement.
-    // Ou si c'est une string, l'utiliser directement.
     let url = '';
-    if (typeof file === 'string') {
-        url = file;
-    } else if (file && typeof file.url === 'string') {
-        url = file.url;
-    }
+    if (typeof file === 'string') url = file;
+    else if (file && typeof file.url === 'string') url = file.url;
 
-    // Si l'URL commence déjà par http ou https (ce qui sera le cas pour GitHub Pages),
-    // on la retourne telle quelle.
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-        return url;
-    }
-    // Sinon, c'est un cas inattendu ou un chemin relatif qui n'est plus géré ici
-    // puisque nos URLs viendront de GitHub Pages. On peut retourner une chaîne vide ou gérer une erreur.
-    console.warn('URL de média inattendue:', url); // Avertissement si une URL non-HTTP/HTTPS est passée
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+
+    console.warn('URL de média inattendue:', url);
     return '';
   }
 
   /* -------------------------
-     markMediaBlocks() :
-     ajoute/retire .has-media aux articles
+     Gestion des blocs média
      ------------------------- */
   function markMediaBlocks() {
     document.querySelectorAll('.activite, .presentation-entreprise, .rapport-hebdomadaire, .bilan')
@@ -135,7 +115,6 @@
       });
   }
 
-  // debounce util
   function debounce(fn, ms = 100) {
     let t;
     return (...args) => {
@@ -144,7 +123,6 @@
     };
   }
 
-  // observe changes in main to update classes when content injected async
   document.addEventListener('DOMContentLoaded', () => {
     markMediaBlocks();
     const main = document.querySelector('main');
@@ -155,47 +133,36 @@
   });
 
   /* -------------------------
-     Rendu activites (on génère une structure stable :
-     <article class="activite">
-       <div class="content"> ... texte ... </div>
-       <div class="media"> ... img / audio ...</div>
-     </article>
+     Rendu Activités
      ------------------------- */
   async function fetchActivites() {
+    const container = document.getElementById('activites-container');
     try {
-      // Pas besoin de ?depth=1 si tu n'as plus de relations 'upload' qui sont "peuplées"
       const response = await fetch(`${apiBase}/activites`);
       if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
       const data = await response.json();
       const activities = data.docs || [];
 
-      const container = document.getElementById('activites-container');
       container.innerHTML = '<h1>Activités</h1>';
 
       if (activities.length === 0) {
-        container.innerHTML += '<p>Aucune activité n\'est disponible pour le moment.</p>';
-        markMediaBlocks();
+        container.innerHTML += '<p>Aucune activité disponible.</p>';
         return;
       }
 
       activities.forEach(act => {
-        // NOUVEAU : photos html - act.photos est maintenant un tableau d'objets { url, alt }
         const photosHtml = (act.photos || []).map(p => {
-          // p est directement l'objet { url: '...', alt: '...' }
           const url = p.url;
           const alt = p.alt || "Photo de l'activité";
           return url ? `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />` : '';
         }).join('');
 
-        // NOUVEAU : audio html - act.fichiersAudio est maintenant un tableau d'objets { url, titre }
         const audioHtml = (act.fichiersAudio || []).map(a => {
-            const url = a.url;
-            const titre = a.titre || 'Fichier audio';
-            return url ? `<audio controls src="${url}" aria-label="${titre}"></audio>` : '';
+          const url = a.url;
+          const titre = a.titre || 'Fichier audio';
+          return url ? `<audio controls src="${url}" aria-label="${titre}"></audio>` : '';
         }).join('');
 
-
-        // construction stable : content + media
         container.innerHTML += `
           <article class="activite">
             <div class="content">
@@ -207,57 +174,48 @@
             <div class="media">
               ${photosHtml}
               ${audioHtml}
-              
             </div>
           </article>
         `;
       });
 
-      // important : après injection on marque les blocs
       markMediaBlocks();
 
     } catch (err) {
       console.error('Erreur Activités:', err);
-      document.getElementById('activites-container').innerHTML = '<p>Erreur lors du chargement des activités.</p>';
+      container.innerHTML = '<p>Erreur lors du chargement des activités.</p>';
     }
   }
 
   /* -------------------------
-     Rendu stages (même pattern : content + media)
+     Rendu Stages
      ------------------------- */
   async function fetchStages() {
+    const container = document.getElementById('stage-container');
     try {
-      // Pas besoin de ?depth=1 si tu n'as plus de relations 'upload' qui sont "peuplées"
       const response = await fetch(`${apiBase}/stage`);
       if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
       const data = await response.json();
       const stages = data.docs || [];
 
-      const container = document.getElementById('stage-container');
       container.innerHTML = '<h1>Stages</h1>';
 
       if (stages.length === 0) {
-        container.innerHTML += '<p>Aucun stage n\'est disponible pour le moment.</p>';
-        markMediaBlocks();
+        container.innerHTML += '<p>Aucun stage disponible.</p>';
         return;
       }
 
       stages.forEach(stage => {
-        // NOUVEAU : photos for stage - stage.photos est maintenant un tableau d'objets { url, alt }
         const photosHtml = (stage.photos || []).map(p => {
           const url = p.url;
           const alt = p.alt || 'Photo stage';
           return url ? `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />` : '';
         }).join('');
 
-        // NOUVEAU : bilanPdfHtml - stage.bilan_pdf_url est une simple URL texte
         const bilanPdfHtml = stage.bilan_pdf_url ? `<a href="${stage.bilan_pdf_url}" download>Télécharger le bilan en PDF</a>` : '';
 
-
-        // NOUVEAU : build semaines HTML (pour les annexes)
         const semainesHtml = (stage.semaine || []).map(s => {
           const annexesHtml = (s.annexes || []).map(a => {
-            // a est maintenant un objet { url: '...', nomFichier: '...' }
             const url = a.url;
             const filename = a.nomFichier || 'Annexe';
             return url ? `<a href="${url}" download>${filename}</a>` : '';
@@ -283,15 +241,13 @@
               <p><strong>Description :</strong> ${stage.description || ''}</p>
               ${stage.lien ? `<p><a href="${stage.lien}" target="_blank" rel="noopener">Site web de l'entreprise</a></p>` : ''}
             </div>
-            <div class="media">
-              ${photosHtml}
-            </div>
+            <div class="media">${photosHtml}</div>
           </article>
 
           <article class="rapport-hebdomadaire">
             <div class="content">
               <h2>Rapport Hebdomadaire</h2>
-              ${semainesHtml || '<p>Aucun rapport hebdomadaire disponible.</p>'}
+              ${semainesHtml || '<p>Aucun rapport disponible.</p>'}
             </div>
             <div class="media"></div>
           </article>
@@ -311,14 +267,20 @@
 
     } catch (err) {
       console.error('Erreur Stage:', err);
-      document.getElementById('stage-container').innerHTML = '<p>Erreur lors du chargement des stages.</p>';
+      container.innerHTML = '<p>Erreur lors du chargement des stages.</p>';
     }
   }
 
-  // Lancer au chargement
-  document.addEventListener('DOMContentLoaded', () => {
-    fetchActivites();
-    fetchStages();
+  /* -------------------------
+     Chargement global
+     ------------------------- */
+  document.addEventListener('DOMContentLoaded', async () => {
+    showSpinner();
+    try {
+      await Promise.all([fetchActivites(), fetchStages()]);
+    } finally {
+      hideSpinner();
+    }
   });
   </script>
 </body>
