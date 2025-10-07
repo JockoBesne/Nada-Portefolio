@@ -62,6 +62,35 @@
   </script>
 
   <script>
+     /* -------------------------
+       Helper : gestion du spinner de chargement
+       ------------------------- */
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const mainContent = document.querySelector('main');
+
+    function showSpinner() {
+      if (loadingSpinner) {
+        loadingSpinner.classList.remove('hidden');
+      }
+      // Cache le contenu principal au moment où le spinner est affiché
+      if (mainContent) {
+          mainContent.style.opacity = '0';
+          mainContent.style.display = 'none'; // Cache complètement l'élément
+      }
+    }
+
+    function hideSpinner() {
+      if (loadingSpinner) {
+        loadingSpinner.classList.add('hidden');
+      }
+      // Affiche le contenu principal après que le spinner soit masqué
+      if (mainContent) {
+          mainContent.style.display = 'block'; // Rends l'élément visible
+          setTimeout(() => { // Petite pause pour la transition CSS
+              mainContent.style.opacity = '1'; // Fait apparaître doucement
+          }, 50); // Ajustez cette valeur si la transition est trop rapide/lente
+      }
+    }
   /* -------------------------
      Helper : construction URL média (robuste)
      ------------------------- */
