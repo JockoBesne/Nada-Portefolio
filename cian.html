@@ -32,287 +32,106 @@
       </div>
     </section>
 
-    <!-- Activités -->
-    <section id="activites" class="content-section">
-      <div class="container" id="activites-container">
-        <!-- Activités insérées dynamiquement -->
-      </div>
-    </section>
+    <!-- Ressources CIAN -->
+    <section id="ressources" class="content-section">
+      <div class="container">
+        <h1>Ressources CIAN</h1>
 
-    <!-- Stage -->
-    <section id="stage" class="content-section">
-      <div class="container" id="stage-container">
-        <h1> Exemple de Stage</h1>
-        <article class="presentation-entreprise"></article>
-        <article class="rapport-hebdomadaire"></article>
-        <article class="bilan">
-          <h2>Bilan</h2>
-          <p>[Résumé du bilan]</p>
+     <!-- Vidéo YouTube -->
+<article class="ressource-card" id="video-section">
+  <h2>Vidéo YouTube</h2>
+  <a href="https://youtu.be/yg-EYCWMHvk" target="_blank" rel="noopener" class="youtube-thumbnail">
+    <img src="https://img.youtube.com/vi/yg-EYCWMHvk/maxresdefault.jpg" alt="Miniature vidéo YouTube - Projet JRI" class="thumbnail-img">
+    <div class="play-button">
+      <i class="fas fa-play"></i>
+    </div>
+    <div class="overlay-text">Voir sur YouTube</div>
+  </a>
+  <div class="video-description">
+    <h3>Projet JRI - Reportage Ferme Familiale</h3>
+    <p>Un reportage audiovisuel de 3 à 5 minutes explorant la transition professionnelle et l'avenir d'une exploitation agricole familiale. À travers une interview authentique et une mise en image sobre, ce projet interroge la transmission et les enjeux contemporains de l'agriculture. Réalisé et monté en DaVinci Resolve.</p>
+  </div>
+</article>
+
+        <!-- Documents PDF -->
+        <article class="ressource-card">
+          <h2>Documents PDF</h2>
+          <div class="pdf-list">
+            <div class="pdf-item">
+              <a href="Pdf\autorisation_diffusion-1.pdf" download class="pdf-link">
+                <i class="fas fa-file-pdf"></i> Autorisation de diffusion
+              </a>
+            </div>
+            <div class="pdf-item">
+              <a href="Pdf\Liste_materiel_Projet_JRI.pdf" download class="pdf-link">
+                <i class="fas fa-file-pdf"></i> Liste matériels du projet
+              </a>
+            </div>
+            <div class="pdf-item">
+              <a href="Pdf\Note_d_intention_Projet_JRI.pdf" download class="pdf-link">
+                <i class="fas fa-file-pdf"></i> Note d'intention
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Stage -->
+        <article class="ressource-card">
+          <h2>Mon Stage - Janvier 2026</h2>
+          <div class="stage-content">
+            <div class="week-item">
+              <h3><i class="fas fa-calendar-alt"></i> Semaine 1 - Février 2026</h3>
+              <p><strong>Activité principale :</strong> Montage vidéo</p>
+              <p><strong>Description :</strong> Première semaine de stage marquée par du montage vidéo. Apprentissage des outils de montage, organisation des rushes et premières manipulations de la timeline.</p>
+              <ul>
+                <li>Familiarisation avec les logiciels de montage</li>
+                <li>Organisation et tri des fichiers vidéo</li>
+                <li>Premières éditions et montage</li>
+              </ul>
+            </div>
+          </div>
         </article>
       </div>
     </section>
   </main>
 
   <footer>
-    <p>&copy; <span id="currentYear"></span> Votre Site</p>
+    <p>&copy; <span id="currentYear"></span> Site de Nathan Darcel</p>
   </footer>
 
 
   <script>
-    // année courante
+    // Année courante
     document.getElementById('currentYear').textContent = new Date().getFullYear();
-  </script>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const sections = document.querySelectorAll('.content-section');
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        } else {
-          entry.target.classList.remove('visible'); // Optionnel: pour cacher quand on sort de l'écran
-        }
-      });
-    }, {
-      threshold: 0.1 // Déclenche quand 10% de la section est visible
-    });
-
-    sections.forEach(section => {
-      observer.observe(section);
-    });
-  });
-</script> 
-  <script>
-  /* -------------------------
-     Gestion du spinner
-     ------------------------- */
-  const loadingSpinner = document.getElementById('loading-spinner');
-  const mainContent = document.querySelector('main');
-
-  function showSpinner() {
-    if (loadingSpinner) loadingSpinner.classList.remove('hidden');
-    if (mainContent) {
-      mainContent.style.opacity = '0';
-      mainContent.style.display = 'none';
-    }
-  }
-
-  function hideSpinner() {
-    if (loadingSpinner) loadingSpinner.classList.add('hidden');
-    if (mainContent) {
-      mainContent.style.display = 'block';
-      setTimeout(() => { mainContent.style.opacity = '1'; }, 50);
-    }
-  }
-
-  /* -------------------------
-     Helper : construction URL média
-     ------------------------- */
-  const apiBase = 'https://cmspayload-q0ln.onrender.com/api';
-
-  function makeMediaUrl(file) {
-    let url = '';
-    if (typeof file === 'string') url = file;
-    else if (file && typeof file.url === 'string') url = file.url;
-
-    if (url.startsWith('http://') || url.startsWith('https://')) return url;
-
-    console.warn('URL de média inattendue:', url);
-    return '';
-  }
-
-  /* -------------------------
-     Gestion des blocs média
-     ------------------------- */
-  function markMediaBlocks() {
-    document.querySelectorAll('.activite, .presentation-entreprise, .rapport-hebdomadaire, .bilan')
-      .forEach(block => {
-        const hasImg = !!block.querySelector('.media img');
-        const hasAudio = !!block.querySelector('.media audio');
-        const hasLink = !!block.querySelector('.media a');
-        if (hasImg || hasAudio || hasLink) block.classList.add('has-media');
-        else block.classList.remove('has-media');
-      });
-  }
-
-  function debounce(fn, ms = 100) {
-    let t;
-    return (...args) => {
-      clearTimeout(t);
-      t = setTimeout(()=> fn(...args), ms);
-    };
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    markMediaBlocks();
-    const main = document.querySelector('main');
-    if (main) {
-      const obs = new MutationObserver(debounce(markMediaBlocks, 80));
-      obs.observe(main, { childList: true, subtree: true });
-    }
-  });
-
-  /* -------------------------
-     Rendu Activités
-     ------------------------- */
-  async function fetchActivites() {
-    const container = document.getElementById('activites-container');
-    try {
-      const response = await fetch(`${apiBase}/activites`);
-      if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-      const data = await response.json();
-      const activities = data.docs || [];
-
-      container.innerHTML = '<h1>Activités</h1>';
-
-      if (activities.length === 0) {
-        container.innerHTML += '<p>Aucune activité disponible.</p>';
-        return;
+    // Animation au chargement de la page
+    document.addEventListener('DOMContentLoaded', () => {
+      // Masquer le spinner après le chargement
+      const loadingSpinner = document.getElementById('loading-spinner');
+      const mainContent = document.querySelector('main');
+      
+      if (loadingSpinner) {
+        loadingSpinner.classList.add('hidden');
+      }
+      if (mainContent) {
+        mainContent.style.display = 'block';
+        mainContent.style.opacity = '1';
       }
 
-      activities.forEach(act => {
-        const photosHtml = (act.photos || []).map(p => {
-          const url = p.url;
-          const alt = p.alt || "Photo de l'activité";
-          return url ? `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />` : '';
-        }).join('');
+      // Observer pour les animations d'apparition des sections
+      const sections = document.querySelectorAll('.content-section');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
 
-        const audioHtml = (act.fichiersAudio || []).map(a => {
-          const url = a.url;
-          const titre = a.titre || 'Fichier audio';
-          return url ? `<audio controls src="${url}" aria-label="${titre}"></audio>` : '';
-        }).join('');
-
-        container.innerHTML += `
-          <article class="activite">
-            <div class="content">
-              <h2>${act.mois || ''}</h2>
-              <p><strong>Activité :</strong> ${act.description || ''}</p>
-              <p><strong>Lieu :</strong> ${act.lieu || '-'}</p>
-              <p><strong>Rôle :</strong> ${act.role || '-'}</p>
-            </div>
-            <div class="media">
-              ${photosHtml}
-              ${audioHtml}
-            </div>
-          </article>
-        `;
+      sections.forEach(section => {
+        observer.observe(section);
       });
-
-      markMediaBlocks();
-
-    } catch (err) {
-      console.error('Erreur Activités:', err);
-      container.innerHTML = '<p>Erreur lors du chargement des activités.</p>';
-    }
-  }
-
-  /* -------------------------
-     Rendu Stages
-     ------------------------- */
-  async function fetchStages() {
-    const container = document.getElementById('stage-container');
-    try {
-      const response = await fetch(`${apiBase}/stage`);
-      if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-      const data = await response.json();
-      const stages = data.docs || [];
-
-      container.innerHTML = '<h1>Stages</h1>';
-
-      if (stages.length === 0) {
-        container.innerHTML += '<p>Aucun stage disponible.</p>';
-        return;
-      }
-
-      stages.forEach(stage => {
-        const photosHtml = (stage.photos || []).map(p => {
-          const url = p.url;
-          const alt = p.alt || 'Photo stage';
-          return url ? `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />` : '';
-        }).join('');
-
-        const audioHtml = (stage.fichiersAudio || []).map(a => {
-          const url = a.url;
-          const titre = a.titre || 'Fichier audio';
-          return url ? `<audio controls src="${url}" aria-label="${titre}"></audio>` : '';
-        }).join('');
-
-
-        const bilanPdfHtml = stage.bilan_pdf_url ? `<a href="${stage.bilan_pdf_url}" download>Télécharger le bilan en PDF</a>` : '';
-
-        const semainesHtml = (stage.semaine || []).map(s => {
-          const annexesHtml = (s.annexes || []).map(a => {
-            const url = a.url;
-            const filename = a.nomFichier || 'Annexe';
-            return url ? `<a href="${url}" download>${filename}</a>` : '';
-          }).join(', ') || 'Aucune annexe';
-
-          return `
-            <div class="week">
-              <h3>Semaine ${s.numero || ''}</h3>
-              <ul>
-                <li><strong>Tâches :</strong> ${s.taches || '-'}</li>
-                <li><strong>Compétences :</strong> ${s.competences || '-'}</li>
-                <li><strong>Annexes :</strong> ${annexesHtml}</li>
-              </ul>
-            </div>
-          `;
-        }).join('');
-
-        container.innerHTML += `
-          <article class="presentation-entreprise">
-            <div class="content">
-              <h2>Présentation de l'entreprise</h2>
-              <p><strong>Nom :</strong> ${stage.nom_entreprise || ''}</p>
-              <p><strong>Description :</strong> ${stage.description || ''}</p>
-              ${stage.lien ? `<p><a href="${stage.lien}" target="_blank" rel="noopener">Site web de l'entreprise</a></p>` : ''}
-            </div>
-            <div class="media">
-              ${photosHtml}
-              ${audioHtml}
-              </div>
-          </article>
-
-          <article class="rapport-hebdomadaire">
-            <div class="content">
-              <h2>Rapport Hebdomadaire</h2>
-              ${semainesHtml || '<p>Aucun rapport disponible.</p>'}
-            </div>
-            <div class="media"></div>
-          </article>
-
-          <article class="bilan">
-            <div class="content">
-              <h2>Bilan</h2>
-              <p>${stage.bilan || 'Pas de bilan disponible.'}</p>
-              ${bilanPdfHtml}
-            </div>
-            <div class="media"></div>
-          </article>
-        `;
-      });
-
-      markMediaBlocks();
-
-    } catch (err) {
-      console.error('Erreur Stage:', err);
-      container.innerHTML = '<p>Erreur lors du chargement des stages.</p>';
-    }
-  }
-
-  /* -------------------------
-     Chargement global
-     ------------------------- */
-  document.addEventListener('DOMContentLoaded', async () => {
-    showSpinner();
-    try {
-      await Promise.all([fetchActivites(), fetchStages()]);
-    } finally {
-      hideSpinner();
-    }
-  });
+    });
   </script>
 </body>
 </html>
