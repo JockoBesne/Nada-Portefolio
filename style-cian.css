@@ -39,6 +39,55 @@ header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     z-index: 100;
+    position: sticky;
+    top: 0;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+}
+
+/* Menu de navigation */
+.nav-menu {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.nav-link {
+    color: var(--light-text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--accent-blue);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-link:hover {
+    color: var(--accent-blue);
+    background: rgba(74, 144, 226, 0.1);
+}
+
+.nav-link:hover::after {
+    width: 80%;
 }
 
 /* Style du bouton "Retour" */
@@ -56,7 +105,7 @@ header .logo {
     border: 1px solid rgba(74, 144, 226, 0.4);
     transition: all 0.3s ease;
     cursor: pointer;
-    margin-left: 20px;
+    white-space: nowrap;
 }
 
 header .logo:hover {
@@ -70,6 +119,72 @@ header .logo::before {
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     content: "\f060";
+}
+
+/* Bouton retour au top */
+.scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: var(--accent-blue);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+    z-index: 999;
+}
+
+.scroll-to-top:hover {
+    background: var(--accent-purple);
+    box-shadow: 0 8px 25px rgba(144, 74, 226, 0.6);
+    transform: translateY(0) scale(1.1);
+}
+
+.scroll-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-video {
+    background: rgba(255, 87, 34, 0.2);
+    color: #ff5722;
+    border: 1px solid rgba(255, 87, 34, 0.4);
+}
+
+.badge-pdf {
+    background: rgba(33, 150, 243, 0.2);
+    color: #2196f3;
+    border: 1px solid rgba(33, 150, 243, 0.4);
+}
+
+.badge-stage {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+    border: 1px solid rgba(76, 175, 80, 0.4);
 }
 
 
@@ -379,6 +494,22 @@ strong {
 
 /* Responsive */
 @media (max-width: 960px) {
+    .header-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .nav-menu {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .nav-link {
+        width: 100%;
+        text-align: center;
+    }
+
     .activite,
     .presentation-entreprise,
     .rapport-hebdomadaire,

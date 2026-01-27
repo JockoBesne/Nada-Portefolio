@@ -103,6 +103,28 @@
   <script>
     // Année courante
     document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    // Masquer le spinner de chargement
+    document.addEventListener('DOMContentLoaded', () => {
+      const loadingSpinner = document.getElementById('loading-spinner');
+      if (loadingSpinner) {
+        loadingSpinner.classList.add('hidden');
+      }
+
+      // Animation au chargement de la page
+      const sections = document.querySelectorAll('.content-section');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      sections.forEach(section => {
+        observer.observe(section);
+      });
+    });
   </script>
 </body>
 </html>
